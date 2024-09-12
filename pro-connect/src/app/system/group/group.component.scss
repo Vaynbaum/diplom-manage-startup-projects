@@ -1,0 +1,32 @@
+@import "../../../styles.scss";
+@import "../../../assets/styles/common-page.scss";
+@import "../../../assets/styles/common-card.scss";
+@import "../../../assets/styles/profile.scss";
+
+.groups-card {
+  height: 360px !important;
+}
+
+.vacancy-card {
+  height: 330px !important;
+  mat-list-item {
+    padding: 0;
+  }
+}
+
+.btns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+@media (min-width: 0px) {
+  .btns button {
+    width: 100%;
+  }
+}
+@media (min-width: $minWidthTablet) {
+  .btns button {
+    width: min-content !important;
+  }
+}

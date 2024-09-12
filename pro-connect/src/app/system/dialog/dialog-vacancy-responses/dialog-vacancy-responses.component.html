@@ -1,0 +1,35 @@
+<h2 mat-dialog-title class="title">{{title}}</h2>
+<mat-dialog-content class="block">
+  <div class="items">
+
+    <div class="item" *ngFor="let res of responses">
+      <div (click)="goToUser(res.user)" class="left-part">
+        <div>
+          <img [src]="urlAvatar(res.user.avatar)">
+        </div>
+        <div class="info">
+          <div class="fullname">
+            {{res.user.firstname}} {{res.user.lastname}}
+          </div>
+          <div>Отклик: {{res.created_at|date:"dd MMMM yyyy HH:mm,"}}
+            <span [ngStyle]="getColor(res.is_approved)">
+              {{getStatus(res.is_approved)}}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="left-part">
+        <button *ngIf="res.is_approved==null" mat-icon-button [matMenuTriggerFor]="menuPart">
+          <mat-icon>{{partSublock.menu.icon}}</mat-icon>
+        </button>
+        <mat-menu #menuPart="matMenu">
+          <button *ngFor="let btn of partSublock.menu.btns" mat-menu-item (click)="btn.actions(res)">
+            <mat-icon>{{btn.icon}}</mat-icon>
+            <span>{{btn.title}}</span>
+          </button>
+        </mat-menu>
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>

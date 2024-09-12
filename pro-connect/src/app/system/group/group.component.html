@@ -1,0 +1,136 @@
+<div class="container">
+  <div class="card profile-card">
+    <div class="cover" [ngStyle]="selectCover()">
+      <button *ngIf="canEdit" (click)="onOpenFileDialog(nameInputCover)" class="cover-btn" mat-flat-button>
+        <mat-icon>{{editCoverBtn.icon}}</mat-icon>{{editCoverBtn.title}}
+      </button>
+      <input *ngIf="canEdit" [ngStyle]="{'display':'none'}" (change)="fileChangeCover($event)" [id]="nameInputCover"
+        [accept]="acceptImages" type="file" />
+    </div>
+
+    <div class="profile">
+      <img class="profile-ava" (click)="onOpenFileDialog(nameInputAva)" [src]="urlAvatar(group?.avatar)">
+      <input *ngIf="canEdit" [ngStyle]="{'display':'none'}" (change)="fileChange($event)" [id]="nameInputAva"
+        [accept]="acceptImages" type="file" />
+      <div class="profile-info">
+        <div class="profile-left">
+          <span class="profile-name">
+            {{group?.name}}
+          </span>
+
+          <div class="profile-subtitle">
+            <div *ngIf="group?.type?.name" class="profile-age">
+              {{group?.type?.name}}
+            </div>
+
+            <button (click)="openDialogGroupMore()" class="more-btn" mat-button color="basic">
+              <mat-icon>{{moreBtn.icon}}</mat-icon>{{moreBtn.title}}
+            </button>
+          </div>
+        </div>
+
+        <div class="btns">
+          <button *ngIf="checkUser()" class="profile-btn" mat-button [matMenuTriggerFor]="menuAct">
+            <mat-icon>menu</mat-icon>Действия
+          </button>
+          <mat-menu #menuAct="matMenu">
+            <button *ngIf="canSub " (click)="subClick()" mat-menu-item color="basic">
+              <mat-icon>{{actionBtn.icon}}</mat-icon>{{actionBtn.title}}
+            </button>
+            <button *ngIf="canEdit " (click)="goToEdit()" mat-menu-item color="basic">
+              <mat-icon>{{editBtn.icon}}</mat-icon>{{editBtn.title}}
+            </button>
+          </mat-menu>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="body-block">
+    <div class="left-column">
+      <div class="card add-post" *ngIf="canAddPost()">
+        <button (click)="addPost()" mat-button>
+          <mat-icon>edit</mat-icon>Написать на стене
+        </button>
+      </div>
+      <app-post-card [isEdit]="canEditPost(post)" (PostDeleted)="postDeleted(post)" [profile]="profile" [post]="post"
+        *ngFor="let post of posts">
+      </app-post-card>
+    </div>
+
+    <div class="right-column">
+      <div *ngIf="group?.users?.length" class="card body-block__card-body groups-card">
+        <div class="card-header-title" (click)="openAllUsers(users, group?.users)">
+          <span class="card-title">{{users}}</span>
+          <span class="card-count"> {{group?.users?.length}}</span>
+        </div>
+
+        <div class="card-content">
+          <mat-list>
+            <mat-list-item *ngFor="let groupLink of group?.users?.slice(0,4)" (click)="goToUser(groupLink.user)">
+              <img matListItemAvatar [src]="urlAvatar(groupLink.user.avatar, true)">
+              <div matListItemTitle>{{groupLink.user.firstname}} {{groupLink.user.lastname}}</div>
+              <span matListItemLine>{{groupLink.role.name}}</span>
+            </mat-list-item>
+          </mat-list>
+        </div>
+      </div>
+
+      <div *ngIf="lenVac()" class="card body-block__card-body vacancy-card">
+
+        <div class="card-header-title" (click)="openAllVacs(vacancies, group?.vacancies)">
+          <span class="card-title">{{vacancies}}</span>
+          <span class="card-count"> {{lenVac()}}</span>
+        </div>
+
+        <div *ngIf="group?.users" class="card-content">
+          <mat-list>
+
+            <ng-container *ngFor="let vac of group?.vacancies?.slice(0,4)">
+              <mat-list-item *ngIf="vac.is_active" (click)="openVacancy(vac)">
+                <div matListItemTitle>{{vac.name}}</div>
+                <span matListItemLine>Открыта с {{vac.created_at|date:'dd MMMM yyyy HH:mm'}}</span>
+              </mat-list-item>
+            </ng-container>
+          </mat-list>
+        </div>
+      </div>
+
+      <div *ngIf="group?.activities?.length" class="card body-block__card-body groups-card">
+        <div class="card-header-title" (click)="openAllActs(activities, group?.activities)">
+          <span class="card-title">{{activities}}</span>
+          <span class="card-count"> {{group?.activities?.length}}</span>
+        </div>
+
+        <div *ngIf="group?.users" class="card-content">
+          <mat-list>
+            <mat-list-item *ngFor="let activity of group?.activities?.slice(0,4)" (click)="goToProject(activity)">
+              <img matListItemAvatar [src]="urlAvatar(activity.img)">
+              <div matListItemTitle>{{activity.name}}</div>
+              <span matListItemLine>{{activity.status.name}}</span>
+            </mat-list-item>
+          </mat-list>
+        </div>
+      </div>
+
+      <div *ngIf="group?.portfolios?.length" class="card body-block__card-body groups-card">
+        <div (click)="openAllPortfolios()" class="card-header-title">
+          <span class="card-title">Достижения</span>
+          <span class="card-count"> {{group?.portfolios?.length}}</span>
+        </div>
+
+        <div *ngIf="group" class="card-content">
+          <mat-list>
+            <mat-list-item (click)="openPortfolio(portfolio)" *ngFor="let portfolio of group.portfolios?.slice(0,4)">
+              <mat-icon *ngIf="portfolio.material?.img" matListItemIcon>image</mat-icon>
+              <mat-icon *ngIf="portfolio.material?.file" matListItemIcon>description</mat-icon>
+              <div matListItemTitle>{{portfolio.name}}</div>
+              <span matListItemLine>{{portfolio.type?.name}} <span *ngIf="portfolio.value">• {{portfolio.value}}</span>
+              </span>
+            </mat-list-item>
+          </mat-list>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

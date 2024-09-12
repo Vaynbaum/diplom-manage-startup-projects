@@ -1,0 +1,86 @@
+<div class="container">
+  <div class="card profile-card">
+    <div class="cover" [ngStyle]="selectCover()">
+      <button *ngIf="canEdit" (click)="onOpenFileDialog(nameInputCover)" class="cover-btn" mat-flat-button>
+        <mat-icon>{{editCoverBtn.icon}}</mat-icon>{{editCoverBtn.title}}
+      </button>
+      <input *ngIf="canEdit" [ngStyle]="{'display':'none'}" (change)="fileChangeCover($event)" [id]="nameInputCover"
+        [accept]="acceptImages" type="file" />
+    </div>
+
+    <div class="profile">
+      <img class="profile-ava" (click)="onOpenFileDialog(nameInputAva)" [src]="urlAvatar(activity?.img)">
+      <input *ngIf="canEdit" [ngStyle]="{'display':'none'}" (change)="fileChange($event)" [id]="nameInputAva"
+        [accept]="acceptImages" type="file" />
+      <div class="profile-info">
+        <div class="profile-left">
+          <span class="profile-name">
+            <mat-icon *ngIf="activity?.direction" color="primary" [matTooltip]="nameDirection(activity?.direction)">
+              {{activity?.direction?.icon}}
+            </mat-icon>
+            {{activity?.name}}
+          </span>
+
+
+          <div class="profile-subtitle">
+            <div *ngIf="activity?.status?.name" class="profile-age">
+              {{activity?.status?.name}}
+            </div>
+
+            <button (click)="openDialogActivityMore()" class="more-btn" mat-button color="basic">
+              <mat-icon>{{moreBtn.icon}}</mat-icon>{{moreBtn.title}}
+            </button>
+          </div>
+        </div>
+
+        <div *ngIf="canEdit||canGoWork" class="btns">
+          <button class="profile-btn" mat-button [matMenuTriggerFor]="menuAct">
+            <mat-icon>menu</mat-icon>Действия
+          </button>
+          <mat-menu #menuAct="matMenu">
+            <button *ngIf="canGoWork" (click)="goToWork()" mat-menu-item color="basic">
+              <mat-icon>{{workBtn.icon}}</mat-icon>{{workBtn.title}}
+            </button>
+            <button *ngIf="canEdit" (click)="goToEdit()" mat-menu-item color="basic">
+              <mat-icon>{{editBtn.icon}}</mat-icon>{{editBtn.title}}
+            </button>
+          </mat-menu>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="body-block">
+    <div class="left-column">
+      <div class="card add-post" *ngIf="canAddPost()">
+        <button (click)="addPost()" mat-button>
+          <mat-icon>edit</mat-icon>Написать на стене
+        </button>
+      </div>
+      <app-post-card [isEdit]="canEditPost(post)" (PostDeleted)="postDeleted(post)" [profile]="profile" [post]="post"
+        *ngFor="let post of posts">
+      </app-post-card>
+    </div>
+
+    <div class="right-column">
+      <div *ngIf="activity?.portfolios?.length" class="card body-block__card-body groups-card">
+        <div (click)="openAllPortfolios()" class="card-header-title">
+          <span class="card-title">Достижения</span>
+          <span class="card-count"> {{activity?.portfolios?.length}}</span>
+        </div>
+
+        <div *ngIf="activity" class="card-content">
+          <mat-list>
+            <mat-list-item (click)="openPortfolio(portfolio)" *ngFor="let portfolio of activity.portfolios?.slice(0,4)">
+              <mat-icon *ngIf="portfolio.material?.img" matListItemIcon>image</mat-icon>
+              <mat-icon *ngIf="portfolio.material?.file" matListItemIcon>description</mat-icon>
+              <div matListItemTitle>{{portfolio.name}}</div>
+              <span matListItemLine>{{portfolio.type?.name}} <span *ngIf="portfolio.value">• {{portfolio.value}}</span>
+              </span>
+            </mat-list-item>
+          </mat-list>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

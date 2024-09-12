@@ -1,0 +1,15 @@
+<h2 mat-dialog-title class="title">{{data.title}}
+  <span class="card-count"> {{data.items.length}}</span>
+</h2>
+
+<mat-dialog-content class="block">
+  <mat-list>
+    <mat-list-item (click)="openPortfolio(portfolio)" *ngFor="let portfolio of data.items">
+      <mat-icon *ngIf="portfolio.material?.img" matListItemIcon>image</mat-icon>
+      <mat-icon *ngIf="portfolio.material?.file" matListItemIcon>description</mat-icon>
+      <div matListItemTitle>{{portfolio.name}}</div>
+      <span matListItemLine>{{portfolio.type?.name}} <span *ngIf="portfolio.value">• {{portfolio.value}}</span>
+      </span>
+    </mat-list-item>
+  </mat-list>
+</mat-dialog-content>

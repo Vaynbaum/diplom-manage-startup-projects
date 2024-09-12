@@ -1,0 +1,7 @@
+FILE_NOT_FOUND = "Файл не найден"
+FILE_GET_FAILED = "Не удалось получить файл"
+FILE_DELETED = "Файл удален"
+FILE_DELETE_FAILED = "Не удалось удалить файл"
+FILE_ADD_FAILED = "Не удалось добавить файл"
+FILE_UNIQUE_NAME = "Файл с таким именем уже есть"
+FILE_NOT_OWNER = "Такого владельца нет"

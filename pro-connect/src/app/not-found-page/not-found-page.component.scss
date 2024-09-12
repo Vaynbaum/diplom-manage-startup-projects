@@ -1,0 +1,300 @@
+@import "../../styles.scss";
+$boxMinWidth: 260px;
+$boxMaxWidth: 400px;
+$boxMinHeight: 450px;
+$boxMaxHeight: 600px;
+$boxGhostMarginTop: 80px;
+$boxGhostPadding: 15px 25px 25px;
+$boxGhostContainerWidth: 100px;
+$boxGhostContainerHeight: 100px;
+$boxGhostEyesHeight: 12px;
+$boxGhostEyesWidth: 70px;
+$fontSizeTitle: 24px;
+$colorDescription: #8c8aa7;
+
+main {
+  max-width: 100vw;
+  min-height: 100vh;
+  background: $backgroundColor;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    border-radius: $borderRadius;
+    min-width: $boxMinWidth;
+    max-width: $boxMaxWidth;
+    width: 90%;
+    min-height: $boxMinHeight;
+    max-height: $boxMaxHeight;
+    height: 90%;
+
+    background: $backgroundColor;
+    box-shadow: $boxShadow;
+    position: absolute;
+    padding: $paddingValue;
+
+    .box__ghost {
+      margin-top: $boxGhostMarginTop;
+      padding: $boxGhostPadding;
+      position: absolute;
+
+      .symbol:nth-child(1) {
+        opacity: 0.2;
+        animation: shine 4s ease-in-out 3s infinite;
+      }
+      .symbol:nth-child(1):before,
+      .symbol:nth-child(1):after {
+        content: "";
+        width: 12px;
+        height: 4px;
+        background: $mainBlue;
+        position: absolute;
+        border-radius: 5px;
+        bottom: 65px;
+        left: 0;
+      }
+      .symbol:nth-child(1):before {
+        transform: rotate(45deg);
+      }
+      .symbol:nth-child(1):after {
+        transform: rotate(-45deg);
+      }
+
+      .symbol:nth-child(2) {
+        position: absolute;
+        left: -5px;
+        top: 30px;
+        height: 18px;
+        width: 18px;
+        border: 4px solid;
+        border-radius: 50%;
+        border-color: $mainBlue;
+        opacity: 0.2;
+        animation: shine 4s ease-in-out 1.3s infinite;
+      }
+
+      .symbol:nth-child(3) {
+        opacity: 0.2;
+        animation: shine 3s ease-in-out 0.5s infinite;
+      }
+      .symbol:nth-child(3):before,
+      .symbol:nth-child(3):after {
+        content: "";
+        width: 12px;
+        height: 4px;
+        background: $mainBlue;
+        position: absolute;
+        border-radius: 5px;
+        top: 5px;
+        left: 40px;
+      }
+      .symbol:nth-child(3):before {
+        transform: rotate(90deg);
+      }
+      .symbol:nth-child(3):after {
+        transform: rotate(180deg);
+      }
+
+      .symbol:nth-child(4) {
+        opacity: 0.2;
+        animation: shine 6s ease-in-out 1.6s infinite;
+      }
+      .symbol:nth-child(4):before,
+      .symbol:nth-child(4):after {
+        content: "";
+        width: 15px;
+        height: 4px;
+        background: $mainBlue;
+        position: absolute;
+        border-radius: 5px;
+        top: 10px;
+        right: 30px;
+      }
+      .symbol:nth-child(4):before {
+        transform: rotate(45deg);
+      }
+      .symbol:nth-child(4):after {
+        transform: rotate(-45deg);
+      }
+
+      .symbol:nth-child(5) {
+        position: absolute;
+        right: 5px;
+        top: 40px;
+        height: 12px;
+        width: 12px;
+        border: 3px solid;
+        border-radius: 50%;
+        border-color: $mainBlue;
+        opacity: 0.2;
+        animation: shine 1.7s ease-in-out 7s infinite;
+      }
+
+      .symbol:nth-child(6) {
+        opacity: 0.2;
+        animation: shine 2s ease-in-out 6s infinite;
+      }
+      .symbol:nth-child(6):before,
+      .symbol:nth-child(6):after {
+        content: "";
+        width: 15px;
+        height: 4px;
+        background: $mainBlue;
+        position: absolute;
+        border-radius: 5px;
+        bottom: 65px;
+        right: -5px;
+      }
+      .symbol:nth-child(6):before {
+        transform: rotate(90deg);
+      }
+      .symbol:nth-child(6):after {
+        transform: rotate(180deg);
+      }
+
+      .box__ghost-container {
+        background: $mainBlue;
+        width: $boxGhostContainerWidth;
+        height: $boxGhostContainerHeight;
+        border-radius: $boxGhostContainerWidth $boxGhostContainerHeight 0 0;
+        position: relative;
+        animation: upndown 3s ease-in-out infinite;
+
+        .box__ghost-eyes {
+          position: absolute;
+          left: 50%;
+          top: 45%;
+          height: $boxGhostEyesHeight;
+          width: $boxGhostEyesWidth;
+
+          .box__eye-left,
+          .box__eye-right {
+            width: $boxGhostEyesHeight;
+            height: $boxGhostEyesHeight;
+            background: $backgroundColor;
+            position: absolute;
+            border-radius: 50%;
+            margin: 0 10px;
+          }
+
+          .box__eye-left {
+            left: 0;
+          }
+
+          .box__eye-right {
+            right: 0;
+          }
+        }
+
+        .box__ghost-bottom {
+          display: flex;
+          position: absolute;
+          top: 100%;
+          left: 0;
+          right: 0;
+
+          div {
+            flex-grow: 1;
+            position: relative;
+            top: -10px;
+            height: 20px;
+            border-radius: 100%;
+            background-color: $mainBlue;
+          }
+
+          div:nth-child(2n) {
+            top: -12px;
+            margin: 0 -0px;
+            border-top: 15px solid $backgroundColor;
+            background: transparent;
+          }
+        }
+      }
+      .box__ghost-shadow {
+        height: 20px;
+        box-shadow: 0 50px 15px 5px $darkBackgroundColor;
+        border-radius: 50%;
+        margin: 0 auto;
+        animation: smallnbig 3s ease-in-out infinite;
+      }
+    }
+
+    .box__description {
+      display: flex;
+      width: 100%;
+      padding: 0 20px;
+      flex-direction: column;
+      align-items: center;
+      gap: $paddingValue;
+      position: absolute;
+      bottom: 20px;
+
+      .box__description-container {
+        color: $mainBlue;
+        text-align: center;
+        width: 100%;
+        font-size: 16px;
+
+        .box__description-title {
+          font-size: $fontSizeTitle;
+          letter-spacing: 0.5px;
+          font-weight: bold;
+        }
+
+        .box__description-text {
+          color: $colorDescription;
+          line-height: 20px;
+          margin-top: $paddingValue;
+        }
+      }
+
+      button {
+        width: 200px;
+      }
+    }
+  }
+}
+
+@keyframes upndown {
+  0% {
+    transform: translateY(5px);
+  }
+  50% {
+    transform: translateY(15px);
+  }
+  100% {
+    transform: translateY(5px);
+  }
+}
+
+@keyframes smallnbig {
+  0% {
+    width: 90px;
+  }
+  50% {
+    width: 100px;
+  }
+  100% {
+    width: 90px;
+  }
+}
+
+@keyframes shine {
+  0% {
+    opacity: 0.2;
+  }
+  25% {
+    opacity: 0.1;
+  }
+  50% {
+    opacity: 0.2;
+  }
+  100% {
+    opacity: 0.2;
+  }
+}

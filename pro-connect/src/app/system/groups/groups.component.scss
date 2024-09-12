@@ -1,0 +1,89 @@
+@import "../.././../styles.scss";
+@import "../../../assets/styles/common-page.scss";
+@import "../../../assets/styles/common-card.scss";
+@import "../../../assets/styles/search.scss";
+
+$widthCard: 210px;
+
+.toggles {
+  gap: 22px !important;
+}
+
+.items {
+  width: 90%;
+}
+
+.items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $paddingValue;
+
+  .item {
+    height: 310px;
+    padding: 0 !important;
+    gap: 0;
+
+    .cover {
+      border-radius: $borderRadius;
+      background-size: cover;
+      background-position: center center;
+      cursor: pointer;
+      height: 65%;
+    }
+
+    .info {
+      gap: $smallGap;
+      display: flex;
+      flex-direction: column;
+      padding: $middleGap;
+      justify-content: flex-end;
+      height: 35%;
+
+      h4{
+        white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+      }
+
+      .sub-btn {
+        width: 100%;
+      }
+    }
+
+    h4 {
+      white-space: nowrap;
+      font-weight: 500;
+      cursor: pointer;
+      font-size: 18px;
+      height: 24px;
+      width: 100%;
+    }
+
+    h5 {
+      color: $gray;
+      cursor: pointer;
+    }
+  }
+}
+
+@media (min-width: 0) {
+  .items {
+    justify-content: center;
+    .item {
+      width: 100%;
+    }
+  }
+}
+
+@media (min-width: 489px) {
+  .items {
+    justify-content: space-between;
+    .item {
+      width: $widthCard;
+    }
+  }
+}
+.example-additional-selection {
+  opacity: 0.75;
+  font-size: 12px;
+}

@@ -1,0 +1,31 @@
+@import "../.././../styles.scss";
+@import "../../../assets/styles/common-page.scss";
+@import "../../../assets/styles/common-card.scss";
+@import "../../../assets/styles/profile.scss";
+@media (min-width: $minWidthTablet) {
+  .body-block {
+    flex-direction: column-reverse;
+
+    .left-column,
+    .right-column {
+      width: 100%;
+    }
+  }
+}
+@media (min-width: 870px) {
+  .body-block {
+    flex-direction: row;
+
+    .left-column {
+      width: calc(60% - calc($paddingValue / 2));
+    }
+
+    .right-column {
+      width: calc(40% - calc($paddingValue / 2));
+    }
+  }
+}
+.example-additional-selection {
+  opacity: 0.75;
+  font-size: 12px;
+}

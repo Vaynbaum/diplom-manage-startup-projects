@@ -1,0 +1,9 @@
+asyncpg
+fastapi
+uvicorn[standard]
+gunicorn
+sqlalchemy
+pydantic-settings
+python-dotenv
+python-multipart
+typesense

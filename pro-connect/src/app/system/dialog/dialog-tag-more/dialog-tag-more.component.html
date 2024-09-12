@@ -1,0 +1,13 @@
+<mat-dialog-content class="block">
+  <div class="field">
+    <mat-icon>{{skill.icon}}</mat-icon>
+    {{skill.title}}: <span class="info">{{data.tagLink.tag?.name}}</span>
+  </div>
+  <div class="field">
+    <mat-icon>{{level.icon}}</mat-icon>
+    {{level.title}}:
+    <span class="info">{{data.tagLink.level?.name}}
+      <span *ngIf="data.tagLink.level?.icon">({{data.tagLink.level?.icon}})</span>
+    </span>
+  </div>
+</mat-dialog-content>

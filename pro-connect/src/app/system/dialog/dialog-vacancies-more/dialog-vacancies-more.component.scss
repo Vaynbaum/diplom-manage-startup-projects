@@ -1,0 +1,10 @@
+@import "../../../../styles.scss";
+@import "../../../../assets/styles/dialog-more.scss";
+
+.card-count {
+  color: $gray;
+}
+
+mat-list-item {
+  cursor: pointer !important;
+}

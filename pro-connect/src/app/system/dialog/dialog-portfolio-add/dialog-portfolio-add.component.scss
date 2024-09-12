@@ -1,0 +1,38 @@
+@import "../../../../styles.scss";
+@import "../../../../assets/styles/dialog-more.scss";
+textarea {
+  resize: none;
+}
+
+form {
+  padding: 0;
+}
+.actions {
+  display: flex;
+  gap: $middleGap;
+
+  .save-btn {
+    padding: 0 10px;
+  }
+}
+@media (min-width: 0px) {
+  .actions {
+    flex-direction: column;
+    align-items: center;
+
+    button {
+      margin: 0;
+      width: 100%;
+    }
+  }
+}
+
+@media (min-width: $minWidthTablet) {
+  .actions {
+    flex-direction: row;
+
+    button {
+      width: unset;
+    }
+  }
+}

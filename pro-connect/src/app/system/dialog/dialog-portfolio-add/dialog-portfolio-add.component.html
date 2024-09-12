@@ -1,0 +1,79 @@
+<h2 mat-dialog-title class="title">{{title}}</h2>
+<mat-dialog-content>
+  <form [formGroup]="form" class="block">
+    <mat-form-field>
+      <mat-label>{{typeInput.label}}</mat-label>
+      <mat-select [formControl]="typeInput.formControl">
+        <mat-option (click)="selectType(t)" *ngFor="let t of typeInput.items" [value]="t.name">{{t.name}}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="typeInput.formControl.invalid">
+        {{typeInput.messageError()}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field *ngFor="let input of inputs">
+      <mat-label>{{input.label}}</mat-label>
+      <input *ngIf="input.type!='textarea'" matInput [type]="input.type" [placeholder]="input.placeholder"
+        [formControl]="input.formControl">
+
+      <textarea rows="5" *ngIf="input.type=='textarea'" matInput [type]="input.type" [placeholder]="input.placeholder"
+        [formControl]="input.formControl">
+      </textarea>
+
+      <mat-icon matSuffix>{{input.icon}}</mat-icon>
+      <mat-error *ngIf="input.formControl.invalid">
+        {{input.messageError()}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{birthdateInput.label}}</mat-label>
+      <input matInput [placeholder]="birthdateInput.placeholder" [matDatepicker]="picker"
+        [formControl]="birthdateInput.formControl">
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker [touchUi]="true"></mat-datepicker>
+      <mat-error *ngIf="birthdateInput.formControl.invalid ">
+        {{birthdateInput.messageError()}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-chip *ngIf="currentMaterial?.file" highlighted color="accent">
+      <mat-icon matChipAvatar fontIcon="description"></mat-icon>
+      {{currentMaterial?.file?.details?.old_name}}
+      <button (click)="deleteFile(currentMaterial?.file)" matChipRemove>
+        <mat-icon>cancel</mat-icon>
+      </button>
+    </mat-chip>
+
+    <mat-chip *ngIf="currentMaterial?.img" highlighted color="accent">
+      <img matChipAvatar [src]="compileURLImg(currentMaterial?.img?.name)">
+      {{currentMaterial?.img?.details?.old_name}}
+      <button (click)="deleteFile(currentMaterial?.img)" matChipRemove>
+        <mat-icon>cancel</mat-icon>
+      </button>
+    </mat-chip>
+
+    <mat-chip-listbox>
+      <mat-chip-row matBadgeColor="primary" highlighted *ngFor="let tag of tags">
+        {{tag.tag?.name}}
+        <button (click)="deleteTag(tag)" matChipRemove>
+          <mat-icon>cancel</mat-icon>
+        </button>
+      </mat-chip-row>
+    </mat-chip-listbox>
+
+    <div class="actions">
+      <button (click)="addTag()" mat-button color="primary">
+        <mat-icon>{{addButton.icon}}</mat-icon>{{addButton.title}}
+      </button>
+      <button (click)="onOpenFileDialog('file-input')" mat-button color="primary">
+        <mat-icon>attach_file</mat-icon>Добавить файл
+      </button>
+      <input [ngStyle]="{'display':'none'}" (change)="fileChange($event)" id="file-input" type="file" />
+      <button class="save-btn" [disabled]="form.invalid" mat-flat-button color="primary" (click)="save()">
+        <mat-icon>{{saveBtn.icon}}</mat-icon>{{saveBtn.title}}
+      </button>
+    </div>
+  </form>
+</mat-dialog-content>

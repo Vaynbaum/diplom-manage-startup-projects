@@ -1,0 +1,56 @@
+@import "../../../../styles.scss";
+@import "../../../../assets/styles/dialog-more.scss";
+mat-list {
+  padding: 0;
+
+  mat-list-item {
+    cursor: pointer !important;
+
+    img {
+      margin: 0 10px 0 0;
+      align-self: center;
+    }
+
+    mat-icon {
+      margin: 0 18px 0 8px;
+      align-self: center;
+    }
+  }
+}
+
+.items {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  .item {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: space-between;
+
+    .left-part {
+      cursor: pointer;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      img {
+        width: 40px;
+        border-radius: 50%;
+      }
+      .img {
+        margin: 0 8px;
+      }
+      .info {
+        display: flex;
+        flex-direction: column;
+        font-size: 13px;
+
+        .fullname {
+          font-weight: 500;
+          font-size: 17px;
+          color: black;
+        }
+      }
+    }
+  }
+}

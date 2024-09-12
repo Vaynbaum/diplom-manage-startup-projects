@@ -1,0 +1,31 @@
+<h2 mat-dialog-title class="title">{{title}}</h2>
+<mat-dialog-content class="block">
+  <div class="field">
+    <mat-icon>title</mat-icon>
+    <div class="info">{{data.vacancy.name}}</div>
+  </div>
+  <div class="field">
+    <mat-icon>calendar_month</mat-icon>Открыта с
+    <div class="info">{{data.vacancy.created_at|date:"dd MMMM yyyy HH:mm"}}</div>
+  </div>
+  <div class="field">
+    <mat-icon>analytics</mat-icon>Откликов:
+    <div class="info">{{data.vacancy.users?.length}}</div>
+  </div>
+  <div class="field">
+    <mat-icon>notes</mat-icon>
+    <div>{{data.vacancy.description}}</div>
+  </div>
+  <mat-divider *ngIf="isSkillShow"></mat-divider>
+
+  <div class="subblock" *ngIf="isSkillShow">
+    <h3>Ключевые навыки</h3>
+    <mat-chip-listbox>
+      <mat-chip-row (click)="onClickChip(tag_link)" [matBadge]="tag_link.level?.icon" matBadgeColor="accent" highlighted
+        *ngFor="let tag_link of data.vacancy?.tags">
+        {{tag_link.tag?.name}}
+      </mat-chip-row>
+    </mat-chip-listbox>
+  </div>
+  <button (click)="createResponse()" *ngIf="showBtn" mat-flat-button color="primary">Откликнуться</button>
+</mat-dialog-content>

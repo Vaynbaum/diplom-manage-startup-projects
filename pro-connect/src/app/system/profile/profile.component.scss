@@ -1,0 +1,51 @@
+@import "../../../styles.scss";
+@import "../../../assets/styles/common-page.scss";
+@import "../../../assets/styles/common-card.scss";
+@import "../../../assets/styles/profile.scss";
+
+$smallHeightCard: 450px;
+$heightCard: 600px;
+$maxWidthCard: 850px;
+$fontSizeProfileName: 1.5rem;
+$fontSizeTitleName: 1rem;
+$heightCoverPhone: 55%;
+$heightCoverTablet: 70%;
+$heightCoverNotebook: 80%;
+
+.dashboard {
+  width: 100%;
+  padding: 10px;
+  flex-direction: row;
+  justify-content: space-between;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.mdc-list-item--with-leading-icon .mdc-list-item__start {
+  margin-left: 24px;
+  margin-right: 24px;
+}
+
+.groups-card {
+  height: 360px !important;
+}
+@media (min-width: 0px) {
+  .dashboard {
+    .chart {
+      width: 100%;
+    }
+    .scatter {
+      width: 100%;
+    }
+  }
+}
+@media (min-width: 810px) {
+  .dashboard {
+    .chart {
+      width: 49%;
+    }
+    .scatter {
+      width: 100%;
+    }
+  }
+}

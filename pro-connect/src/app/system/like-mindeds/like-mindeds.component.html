@@ -1,0 +1,93 @@
+<div class="container">
+  <div class="search-block card">
+    <mat-form-field class="search-field">
+      <mat-label>{{searchField.label}}</mat-label>
+      <input [placeholder]="searchField.placeholder" (keyup)="onKeyup()" matInput [(ngModel)]="searchValue">
+      <button *ngIf="searchValue" matSuffix mat-icon-button (click)="clearSearchValue()">
+        <mat-icon>{{searchField.closeBtn}}</mat-icon>
+      </button>
+      <mat-icon *ngIf="!searchValue" matSuffix>{{searchField.searchBtn}}</mat-icon>
+    </mat-form-field>
+
+    <mat-accordion>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Фильтры
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="filters">
+          <mat-form-field class="filter">
+            <mat-label>{{cityInput.label}}</mat-label>
+            <input [type]="cityInput.type" (keyup)="onKeyupCity()" [placeholder]="cityInput.placeholder" matInput
+              [formControl]="cityInput.formControl" [matAutocomplete]="auto2">
+            <mat-autocomplete #auto2="matAutocomplete">
+              <ng-container *ngFor="let city of cityInput.values | async">
+                <mat-option [value]="city.name" (click)="selectCity(city)">
+                  <span>{{city.name}}</span>
+                  <small *ngIf="city.region"> ({{city.region.name}})</small>
+                </mat-option>
+              </ng-container>
+            </mat-autocomplete>
+            <mat-icon *ngIf="cityInput.icon && !cityInput.is_enable_btn" matSuffix>{{cityInput.icon}}</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field class="filter">
+            <mat-label>{{skillInput.label}}</mat-label>
+            <mat-chip-grid #chipGrid>
+              <mat-chip-row highlighted *ngFor="let tag of selectedTags">
+                {{tag.name}}
+                <button (click)="deleteTag(tag)" matChipRemove>
+                  <mat-icon>cancel</mat-icon>
+                </button>
+              </mat-chip-row>
+            </mat-chip-grid>
+            <input (keyup)="onKeyupTag()" #fruitInput [placeholder]="skillInput.placeholder"
+              [formControl]="skillInput.formControl" [matChipInputFor]="chipGrid" [matAutocomplete]="auto" />
+            <mat-autocomplete #auto="matAutocomplete">
+              <ng-container *ngFor="let tag of skillInput.values | async">
+                <mat-option (click)="selectTag(tag)" [value]="tag.name">
+                  <span>{{tag.name}}</span>
+                </mat-option>
+              </ng-container>
+            </mat-autocomplete>
+            <mat-icon *ngIf="skillInput.icon && !skillInput.is_enable_btn" matSuffix>{{skillInput.icon}}</mat-icon>
+          </mat-form-field>
+
+          <div class="filter">
+            <div class="legend">
+              <mat-slide-toggle (change)="changeAge()" [(ngModel)]="ageSearch.enable">Учитывать возраст
+              </mat-slide-toggle>
+            </div>
+            <mat-slider class="slider" min="14" max="100" discrete="true" [disabled]="!ageSearch.enable">
+              <input (valueChange)="changeAge()" [(ngModel)]="ageSearch.start" value="18" matSliderStartThumb>
+              <input (valueChange)="changeAge()" [(ngModel)]="ageSearch.end" value="35" matSliderEndThumb>
+            </mat-slider>
+          </div>
+        </div>
+        <mat-action-row>
+          <button (click)="resetFilters()" mat-flat-button color="primary">
+            <mat-icon>restart_alt</mat-icon> Сбросить
+          </button>
+        </mat-action-row>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+
+  <div class="items">
+    <div class="item card" *ngFor="let user of users">
+      <div (click)="goToUser(user.user)" class="cover" [ngStyle]="urlAvatar(user.user.user_abstract.avatar)"></div>
+      <div class="info">
+        <h4 (click)="goToUser(user.user)">{{user.user.user_abstract.lastname}}
+          {{user.user.user_abstract.firstname}}
+        </h4>
+        <h5 *ngIf="user.user.city?.name || user.user.birthdate" (click)="goToUser(user.user)">
+          {{getAge(user.user)}}
+          <span *ngIf="user.user.city?.name && user.user.birthdate && getAge(user.user)!=''">•</span> {{user.user.city?.name}}</h5>
+        <button (click)="sub(user)" *ngIf="user.canSub && checkUser()" class="sub-btn" mat-flat-button>
+          <mat-icon>{{user.subBtn.icon}}</mat-icon>{{user.subBtn.title}}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

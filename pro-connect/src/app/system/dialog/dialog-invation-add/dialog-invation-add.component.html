@@ -1,0 +1,19 @@
+<h2 mat-dialog-title class="title">{{title}}</h2>
+<form [formGroup]="form" class="block">
+  <mat-form-field>
+    <mat-label>{{groupInput.label}}</mat-label>
+    <mat-select [formControl]="groupInput.formControl">
+      <mat-option (click)="selectGroup(t)" *ngFor="let t of groupInput.items" [value]="t.name">
+        <img alt="" class="example-option-img" [src]="urlAvatar(t.img)" height="25">
+        {{t.name}} <span *ngIf="t.icon">({{t.icon}})</span>
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="groupInput.formControl.invalid">
+      {{groupInput.messageError()}}
+    </mat-error>
+  </mat-form-field>
+
+  <button [disabled]="form.invalid" mat-flat-button color="primary" (click)="save()">
+    <mat-icon>{{saveBtn.icon}}</mat-icon>{{saveBtn.title}}
+  </button>
+</form>

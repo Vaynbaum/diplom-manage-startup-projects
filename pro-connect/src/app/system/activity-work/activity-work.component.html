@@ -1,0 +1,225 @@
+<div class="container">
+  <div class="card main-card">
+    <div class="card-header-title">
+      <a [routerLink]="[backButton.link]" class="back-btn" mat-button>
+        <mat-icon [fontIcon]="backButton.icon"></mat-icon>
+      </a>
+      <h3 class="title">{{title}}</h3>
+    </div>
+    <mat-tab-group [ngStyle]="selectPadPage()" (selectedIndexChange)="checkTab($event)">
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="example-tab-icon">chat</mat-icon>
+          Чат
+        </ng-template>
+        <div class="message-page">
+          <div class="message-container" id="mat-card" (scroll)="onScroll($event)">
+            <div class="date-container" *ngFor="let dateItem of messages | groupByDate" >
+              <mat-chip color="warn" class="date_pipe" highlighted>{{dateItem.key| date:'dd MMMM yyyy'}}</mat-chip>
+              <div [ngStyle]="selectSide(message)" class="message-row" *ngFor="let message of dateItem.value">
+                <img *ngIf="!isMyMsg(message)" [src]="urlAvatar(message.sender.avatar)">
+                <div [ngStyle]="selectColor(message)" class="message" (click)="openActs(menuTrigger,message)">
+                  <span #menuTrigger="matMenuTrigger" [matMenuTriggerFor]="menu"></span>
+                  <mat-menu #menu="matMenu">
+                    <button (click)="deleteMsg(message)" mat-menu-item>
+                      <mat-icon>delete</mat-icon>
+                      <span>Удалить</span>
+                    </button>
+                  </mat-menu>
+                  <div *ngIf="!isMyMsg(message)" class="sender-name">{{message.sender.firstname}}</div>
+                  <div class="message-content">{{message.text}}
+                    <span [ngStyle]="selectColorCreate(message)" class="message-create">
+                      {{message.created_at|date:'HH:mm'}}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <mat-form-field appearance="fill">
+            <textarea id="textarea" (keyup.enter)="sendMsg()" [formControl]="textarea.formControl"
+              [placeholder]="textarea.placeholder" matInput></textarea>
+            <button (click)="sendMsg()" [disabled]="msgCtrl.invalid" mat-icon-button matSuffix>
+              <mat-icon>send</mat-icon>
+            </button>
+          </mat-form-field>
+        </div>
+      </mat-tab>
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="example-tab-icon">task</mat-icon>
+          Задачи
+        </ng-template>
+        <div class="task-page">
+          <button *ngIf="checkCUDTask()" (click)="addTask()" class="add-task" mat-flat-button color="primary">
+            Добавить задачу
+          </button>
+          <mat-tab-group>
+            <mat-tab label="Выполнить">
+              <ng-container *ngFor="let task of activity?.tasks">
+                <div *ngIf="task.status_id==1" class="task">
+                  <div class="task-header">
+                    <h3>{{task.name}}</h3>
+                    <button mat-icon-button [matMenuTriggerFor]="menu">
+                      <mat-icon>more_vert</mat-icon>
+                    </button>
+                    <mat-menu #menu="matMenu">
+                      <ng-container *ngFor="let btn of menuBtn.btns">
+                        <button *ngIf="btn.check()" (click)="btn.actions(task)" mat-menu-item>
+                          <mat-icon>{{btn.icon}}</mat-icon><span>{{btn.title}}</span>
+                        </button>
+                      </ng-container>
+                    </mat-menu>
+                  </div>
+                  <markdown [disableSanitizer]="true" ngPreserveWhitespaces [data]="task.description" [emoji]="true">
+                  </markdown>
+                  <div class="task-more">
+                    <div [ngStyle]="statusColor(task.status)" class="status">
+                      {{task.status.name}}
+                    </div>
+                    <div *ngIf="task.deadline" class="deadline">
+                      <mat-icon fontIcon="schedule"></mat-icon>
+                      <span [ngStyle]="checkDeadline(task)">Срок до {{task.deadline|date:'dd MMMM yyyy'}}</span>
+                    </div>
+                  </div>
+                  <div class="actions">
+                    <div class="left">
+                      <mat-icon *ngIf="len_achive(task)>0">attach_file</mat-icon>
+                      <a (click)="showFilesMore(task)" class="info" *ngIf="len_achive(task)>0">{{len_achive(task)}}</a>
+                    </div>
+
+                    <div class="right">
+                      <ng-container *ngIf="checkCUDTask()">
+                        <div (click)="unassign(link)" matTooltip="Кликните для удаления из назначенных" class="ava"
+                          *ngFor="let link of task.users?.slice(0,3)">
+                          <img [src]="urlAvatar(link.user.avatar)">
+                          <mat-icon color="" fontIcon="close"></mat-icon>
+                        </div>
+                      </ng-container>
+                      <ng-container *ngIf="!checkCUDTask()">
+                        <img *ngFor="let link of task.users?.slice(0,3)" [src]="urlAvatar(link.user.avatar)">
+                      </ng-container>
+
+                      <button (click)="showMoreAssigns(task)" color="primary" *ngIf="task.users.length > 2"
+                        mat-mini-fab>
+                        <mat-icon>more_horiz</mat-icon>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+            </mat-tab>
+            <mat-tab label="В процессе">
+              <ng-container *ngFor="let task of activity?.tasks">
+                <div *ngIf="task.status_id!=3 && task.status_id!=1" class="task">
+                  <div class="task-header">
+                    <h3>{{task.name}}</h3>
+                    <button mat-icon-button [matMenuTriggerFor]="menu">
+                      <mat-icon>{{menuBtn.icon}}</mat-icon>
+                    </button>
+                    <mat-menu #menu="matMenu">
+                      <ng-container *ngFor="let btn of menuBtn.btns">
+                        <button *ngIf="btn.check()" (click)="btn.actions(task)" mat-menu-item>
+                          <mat-icon>{{btn.icon}}</mat-icon><span>{{btn.title}}</span>
+                        </button>
+                      </ng-container>
+                    </mat-menu>
+                  </div>
+                  <markdown [disableSanitizer]="true" ngPreserveWhitespaces [data]="task.description" [emoji]="true">
+                  </markdown>
+                  <div class="task-more">
+                    <div [ngStyle]="statusColor(task.status)" class="status">
+                      {{task.status.name}}
+                    </div>
+                    <div *ngIf="task.deadline" class="deadline">
+                      <mat-icon fontIcon="schedule"></mat-icon>
+                      <span [ngStyle]="checkDeadline(task)">Срок до {{task.deadline|date:'dd MMMM yyyy'}}</span>
+                    </div>
+                  </div>
+
+                  <div class="actions">
+                    <div class="left">
+                      <mat-icon *ngIf="len_achive(task)>0">attach_file</mat-icon>
+                      <a (click)="showFilesMore(task)" class="info" *ngIf="len_achive(task)>0">{{len_achive(task)}}</a>
+                    </div>
+
+                    <div class="right">
+                      <ng-container *ngIf="checkCUDTask()">
+                        <div (click)="unassign(link)" matTooltip="Кликните для удаления из назначенных" class="ava"
+                          *ngFor="let link of task.users?.slice(0,3)">
+                          <img [src]="urlAvatar(link.user.avatar)">
+                          <mat-icon color="" fontIcon="close"></mat-icon>
+                        </div>
+                      </ng-container>
+                      <ng-container *ngIf="!checkCUDTask()">
+                        <img *ngFor="let link of task.users?.slice(0,3)" [src]="urlAvatar(link.user.avatar)">
+                      </ng-container>
+                      <button (click)="showMoreAssigns(task)" color="primary" *ngIf="task.users.length > 3"
+                        mat-mini-fab>
+                        <mat-icon>more_horiz</mat-icon>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+            </mat-tab>
+            <mat-tab label="Завершенные">
+              <ng-container *ngFor="let task of activity?.tasks">
+                <div *ngIf="task.status_id==3" class="task">
+                  <div class="task-header">
+                    <h3>{{task.name}}</h3>
+                    <button mat-icon-button [matMenuTriggerFor]="menu">
+                      <mat-icon>more_vert</mat-icon>
+                    </button>
+                    <mat-menu #menu="matMenu">
+                      <ng-container *ngFor="let btn of menuBtn.btns">
+                        <button *ngIf="btn.check()" (click)="btn.actions(task)" mat-menu-item>
+                          <mat-icon>{{btn.icon}}</mat-icon><span>{{btn.title}}</span>
+                        </button>
+                      </ng-container>
+                    </mat-menu>
+                  </div>
+                  <markdown [disableSanitizer]="true" ngPreserveWhitespaces [data]="task.description" [emoji]="true">
+                  </markdown>
+                  <div class="task-more">
+                    <div [ngStyle]="statusColor(task.status)" class="status">
+                      {{task.status.name}}
+                    </div>
+                    <div *ngIf="task.deadline" class="deadline">
+                      <mat-icon fontIcon="schedule"></mat-icon>
+                      <span [ngStyle]="checkDeadline(task)">Срок до {{task.deadline|date:'dd MMMM yyyy'}}</span>
+                    </div>
+                  </div>
+
+                  <div class="actions">
+                    <div class="left">
+                      <mat-icon *ngIf="len_achive(task)>0">attach_file</mat-icon>
+                      <a (click)="showFilesMore(task)" class="info" *ngIf="len_achive(task)>0">{{len_achive(task)}}</a>
+                    </div>
+
+                    <div class="right">
+                      <ng-container *ngIf="checkCUDTask()">
+                        <div (click)="unassign(link)" matTooltip="Кликните для удаления из назначенных" class="ava"
+                          *ngFor="let link of task.users?.slice(0,3)">
+                          <img [src]="urlAvatar(link.user.avatar)">
+                          <mat-icon color="" fontIcon="close"></mat-icon>
+                        </div>
+                      </ng-container>
+                      <ng-container *ngIf="!checkCUDTask()">
+                        <img *ngFor="let link of task.users?.slice(0,3)" [src]="urlAvatar(link.user.avatar)">
+                      </ng-container>
+                      <button (click)="showMoreAssigns(task)" color="primary" *ngIf="task.users.length > 2"
+                        mat-mini-fab>
+                        <mat-icon>more_horiz</mat-icon>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+            </mat-tab>
+          </mat-tab-group>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</div>

@@ -1,0 +1,83 @@
+@import "../../styles.scss";
+@import "./common-page.scss";
+@import "./common-card.scss";
+
+mat-accordion {
+  width: 90%;
+  max-width: 800px;
+
+  mat-expansion-panel {
+    width: 100%;
+
+    mat-action-row button {
+      padding: 0 $middlePaddingValue;
+    }
+
+    mat-expansion-panel-header {
+      height: min-content;
+      .back-btn {
+        height: 100%;
+        position: absolute;
+        left: 0;
+      }
+      mat-panel-title {
+        height: 43px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .title {
+          font-size: 20px;
+          font-weight: 500;
+        }
+      }
+    }
+
+    form {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+
+      .contact-row {
+        width: 100%;
+        display: flex;
+        gap: $smallGap;
+        justify-content: space-between;
+
+        mat-form-field {
+          width: 90%;
+        }
+      }
+    }
+
+    mat-action-row {
+      display: flex;
+      gap:$middleGap;
+    }
+  }
+}
+
+@media (min-width: 0px) {
+  mat-action-row {
+    flex-direction: column;
+    align-items: center;
+    padding-right: 24px !important;
+
+    button {
+      margin: 0;
+      width: 100%;
+    }
+  }
+}
+
+@media (min-width: $minWidthTablet) {
+  mat-action-row {
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding-right: 8px !important;
+
+    button {
+      width: unset
+    }
+  }
+}

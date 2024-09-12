@@ -1,0 +1,66 @@
+@import "../../styles.scss";
+
+$sizeImg: 24px;
+$fontWeight: 450;
+
+form {
+  padding: 0 $paddingValue $paddingValue $paddingValue;
+}
+
+.title {
+  margin-left: $paddingValue;
+  margin-bottom: $paddingValue;
+}
+
+.block {
+  display: flex;
+  flex-direction: column;
+  gap: $middleGap;
+  min-height: 100%;
+
+  .subblock {
+    display: flex;
+    flex-direction: column;
+    gap: $middleGap;
+
+    h3 {
+      font-weight: $fontWeight;
+    }
+
+    .subblock-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: $smallGap;
+    }
+  }
+}
+
+.field {
+  display: flex;
+  gap: $smallGap;
+  flex-wrap: wrap;
+
+  img {
+    width: $sizeImg;
+  }
+
+  mat-icon {
+    color: $gray;
+  }
+
+  .info,
+  a,
+  div {
+    width: fit-content;
+    text-align: justify;
+  }
+
+  .info,
+  a {
+    color: $mainBlue;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+}

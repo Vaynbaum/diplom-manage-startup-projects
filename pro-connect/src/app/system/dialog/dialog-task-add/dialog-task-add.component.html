@@ -1,0 +1,46 @@
+<h2 mat-dialog-title class="title">{{title}}</h2>
+<mat-dialog-content>
+  <form [formGroup]="form" class="block">
+    <mat-form-field *ngFor="let inp of inps">
+      <mat-label>{{inp.label}}</mat-label>
+      <input matInput [type]="inp.type" [placeholder]="inp.placeholder" [formControl]="inp.formControl">
+      <mat-icon matSuffix>{{inp.icon}}</mat-icon>
+      <mat-error *ngIf="inp.formControl.invalid">
+        {{inp.messageError()}}
+      </mat-error>
+    </mat-form-field>
+
+    <md-editor [upload]="doUpload" [height]="'300px'" formControlName="description">
+    </md-editor>
+
+    <mat-form-field>
+      <mat-label>{{birthdateInput.label}}</mat-label>
+      <input matInput [placeholder]="birthdateInput.placeholder" [matDatepicker]="picker"
+        [formControl]="birthdateInput.formControl">
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker [touchUi]="true"></mat-datepicker>
+      <mat-error *ngIf="birthdateInput.formControl.invalid ">
+        {{birthdateInput.messageError()}}
+      </mat-error>
+    </mat-form-field>
+    <mat-chip-listbox>
+      <mat-chip highlighted color="accent" *ngFor="let file of files">
+        <mat-icon *ngIf="!checkIcon(file)" matChipAvatar fontIcon="description"></mat-icon>
+        <mat-icon *ngIf="checkIcon(file)" matChipAvatar fontIcon="image"></mat-icon>
+        {{file.details.old_name}}
+        <button (click)="deleteFile(file)" matChipRemove>
+          <mat-icon>cancel</mat-icon>
+        </button>
+      </mat-chip>
+    </mat-chip-listbox>
+    <div class="actions">
+      <button (click)="onOpenFileDialog('file-input')" class="save-btn" mat-button color="primary">
+        <mat-icon>attach_file</mat-icon>Добавить файл
+      </button>
+      <input [ngStyle]="{'display':'none'}" (change)="fileChange($event)" id="file-input" type="file" />
+      <button class="save-btn" [disabled]="form.invalid" mat-flat-button color="primary" (click)="save()">
+        <mat-icon>{{saveBtn.icon}}</mat-icon>{{saveBtn.title}}
+      </button>
+    </div>
+  </form>
+</mat-dialog-content>

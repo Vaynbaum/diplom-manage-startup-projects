@@ -1,0 +1,13 @@
+fastapi
+gunicorn
+pydantic-sqlalchemy
+python-dotenv
+python-multipart
+uvicorn[standard]
+asyncpg
+sqlalchemy
+passlib[bcrypt]
+python-jose[cryptography]
+gunicorn
+PyJWT
+vakt

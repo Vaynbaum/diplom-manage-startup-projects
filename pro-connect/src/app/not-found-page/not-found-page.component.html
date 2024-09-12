@@ -1,0 +1,38 @@
+<!-- <script type="text/javascript" src="../../assets/js/jquery.min.js"></script> -->
+<main>
+  <div class="box">
+    <div class="box__ghost">
+      <div class="symbol"></div>
+      <div class="symbol"></div>
+      <div class="symbol"></div>
+      <div class="symbol"></div>
+      <div class="symbol"></div>
+      <div class="symbol"></div>
+
+      <div class="box__ghost-container">
+        <div class="box__ghost-eyes" [style.transform]="styleEyes">
+          <div class="box__eye-left"></div>
+          <div class="box__eye-right"></div>
+        </div>
+        <div class="box__ghost-bottom">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+      </div>
+      <div class="box__ghost-shadow"></div>
+    </div>
+
+    <div class="box__description">
+      <div class="box__description-container">
+        <div class="box__description-title">{{title}}</div>
+        <div class="box__description-text">{{desc}}</div>
+      </div>
+
+      <button [routerLink]="[homeLink]" color="primary" mat-flat-button>{{btn}}</button>
+    </div>
+
+  </div>
+</main>

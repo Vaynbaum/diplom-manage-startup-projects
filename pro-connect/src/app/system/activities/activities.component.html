@@ -1,0 +1,111 @@
+<div class="container">
+  <div class="search-block card">
+    <button *ngIf="checkUser()" (click)="addActivity()" class="add-btn" mat-flat-button color="primary">
+      <mat-icon>{{addBtn.icon}}</mat-icon>{{addBtn.title}}
+    </button>
+
+    <mat-form-field class="search-field">
+      <mat-label>{{searchField.label}}</mat-label>
+      <input [placeholder]="searchField.placeholder" (keyup)="onKeyup()" matInput [(ngModel)]="searchValue">
+      <button *ngIf="searchValue" matSuffix mat-icon-button (click)="clearSearchValue()">
+        <mat-icon>{{searchField.closeBtn}}</mat-icon>
+      </button>
+      <mat-icon *ngIf="!searchValue" matSuffix>{{searchField.searchBtn}}</mat-icon>
+    </mat-form-field>
+
+    <mat-accordion >
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Фильтры
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="filters">
+          <mat-form-field class="filter">
+            <mat-label>{{typeInput.label}}</mat-label>
+            <mat-select [formControl]="typeInput.formControl" multiple>
+              <mat-select-trigger>
+                {{displayValue(typeInput.formControl)}}
+                <span *ngIf="(typeInput.formControl.value?.length || 0) > 1" class="example-additional-selection">
+                  {{otherStatus()}}
+                </span>
+              </mat-select-trigger>
+              <mat-option (click)="selectType()" *ngFor="let topping of typeInput.values | async" [value]="topping">
+                {{topping.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field class="filter">
+            <mat-label>{{directionInput.label}}</mat-label>
+            <mat-select [formControl]="directionInput.formControl" multiple>
+              <mat-select-trigger>
+                {{displayValue(directionInput.formControl)}}
+                <span *ngIf="(directionInput.formControl.value?.length || 0) > 1" class="example-additional-selection">
+                  {{otherDirection()}}
+                </span>
+              </mat-select-trigger>
+              <mat-option (click)="selectDirections()" *ngFor="let topping of directionInput.values | async"
+                [value]="topping">
+                <mat-icon >{{topping.icon}}</mat-icon>
+                {{topping.name}}
+              </mat-option>
+            </mat-select>
+
+          </mat-form-field>
+
+          <mat-form-field class="filter">
+            <mat-label>{{skillInput.label}}</mat-label>
+            <mat-chip-grid #chipGrid>
+              <mat-chip-row highlighted *ngFor="let tag of selectedTags">
+                {{tag.name}}
+                <button (click)="deleteTag(tag)" matChipRemove>
+                  <mat-icon>cancel</mat-icon>
+                </button>
+              </mat-chip-row>
+            </mat-chip-grid>
+            <input (keyup)="onKeyupTag()" #fruitInput [placeholder]="skillInput.placeholder"
+              [formControl]="skillInput.formControl" [matChipInputFor]="chipGrid" [matAutocomplete]="auto" />
+            <mat-autocomplete #auto="matAutocomplete">
+              <ng-container *ngFor="let tag of skillInput.values | async">
+                <mat-option (click)="selectTag(tag)" [value]="tag.name">
+                  <span>{{tag.name}}</span>
+                </mat-option>
+              </ng-container>
+            </mat-autocomplete>
+            <mat-icon *ngIf="skillInput.icon && !skillInput.is_enable_btn" matSuffix>{{skillInput.icon}}</mat-icon>
+          </mat-form-field>
+
+          <div class="filter toggles">
+            <mat-slide-toggle (change)="changeGroup()" [(ngModel)]="is_group">Есть группа
+            </mat-slide-toggle>
+          </div>
+
+        </div>
+        <mat-action-row>
+          <button (click)="resetFilters()" mat-flat-button color="primary">
+            <mat-icon>restart_alt</mat-icon> Сбросить
+          </button>
+        </mat-action-row>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+
+  <div class="items">
+    <div class="item card" *ngFor="let activity of activities">
+      <div class="cover" (click)="goToProject(activity)" [ngStyle]="urlAvatar(activity.img)"></div>
+      <div class="info">
+        <div class="title-with-icon">
+          <mat-icon color="primary" [matTooltip]="nameDirection(activity.direction)" *ngIf="activity.direction">
+            {{activity.direction.icon}}</mat-icon>
+          <h4 (click)="goToProject(activity)">{{activity.name}}</h4>
+        </div>
+        <h5 (click)="goToProject(activity)">{{activity.status.name}}</h5>
+        <button (click)="addRequest(activity)" *ngIf="!activity.group_id && canSendReq()" class="sub-btn"
+          mat-flat-button>
+          <mat-icon>{{requestBtn.icon}}</mat-icon>{{requestBtn.title}}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

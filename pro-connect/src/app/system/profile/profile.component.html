@@ -1,0 +1,188 @@
+<div class="container" >
+  <div class="card profile-card">
+    <div class="cover" [ngStyle]="selectCover()">
+      <button *ngIf="isMyProfile" (click)="onOpenFileDialog(nameInputCover)" class="cover-btn" mat-flat-button>
+        <mat-icon>{{editCoverBtn.icon}}</mat-icon>{{editCoverBtn.title}}
+      </button>
+      <input *ngIf="isMyProfile" [ngStyle]="{'display':'none'}" (change)="fileChangeCover($event)" [id]="nameInputCover"
+        [accept]="acceptImages" type="file" />
+    </div>
+
+    <div class="profile">
+      <img class="profile-ava" (click)="onOpenFileDialog(nameInputAva)" [src]="urlAvatar(profile.avatar)">
+      <input *ngIf="isMyProfile" [ngStyle]="{'display':'none'}" (change)="fileChange($event)" [id]="nameInputAva"
+        [accept]="acceptImages" type="file" />
+      <div class="profile-info">
+        <div class="profile-left">
+          <span class="profile-name">
+            {{profile.firstname}} {{profile.lastname}}
+          </span>
+
+          <div class="profile-subtitle">
+            <div *ngIf="profile.user?.birthdate" class="profile-age">
+              {{getAge()}}
+            </div>
+            <div *ngIf="profile.user?.city?.name" class="profile-city">
+              <mat-icon>{{locationIcon}}</mat-icon> {{profile.user?.city?.name}}
+            </div>
+            <button (click)="openDialogProfileMore()" class="more-btn" mat-button color="basic">
+              <mat-icon>{{moreBtn.icon}}</mat-icon>{{moreBtn.title}}
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <button *ngIf="isMyProfile" [routerLink]="[editBtn.link]" class="profile-btn" mat-button color="basic">
+            <mat-icon>{{editBtn.icon}}</mat-icon>{{editBtn.title}}
+          </button>
+          <button (click)="subClick()" *ngIf="!isMyProfile && checkUser()" class="profile-btn" mat-button color="basic">
+            <mat-icon>{{actionBtn.icon}}</mat-icon>{{actionBtn.title}}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div  class="body-block">
+    <div *ngIf="checkViewUser()" class="left-column">
+      <div class="card add-post" *ngIf="canAddPost()">
+        <button (click)="addPost()" mat-button>
+          <mat-icon>edit</mat-icon>Написать на стене
+        </button>
+      </div>
+      <app-post-card [isEdit]="canEditPost(post)" (PostDeleted)="postDeleted(post)" [profile]="profile" [post]="post"
+        *ngFor="let post of posts">
+      </app-post-card>
+    </div>
+
+    <div *ngIf="checkViewUser()"  class="right-column">
+      <div *ngIf="profile.user?.favorites?.length || profile.user?.subscribers?.length"
+        class="card body-block__card-body freinds-card">
+        <div class="card-block">
+          <div class="card-header-title" (click)="openAllUsers(favs, profile.user?.favorites)">
+            <span class="card-title">{{favs}}</span>
+            <span class="card-count"> {{profile.user?.favorites?.length}}</span>
+          </div>
+          <div class="card-content">
+            <mat-list>
+              <mat-list-item *ngFor="let subLink of profile.user?.favorites?.slice(0,2)"
+                (click)="goToAnyPage(subLink.favorite)">
+                <img matListItemAvatar [src]="urlAvatar(subLink.favorite?.avatar)">
+                <div matListItemTitle>{{subLink.favorite?.firstname}}
+                  {{subLink.favorite?.lastname}}</div>
+              </mat-list-item>
+            </mat-list>
+          </div>
+        </div>
+        <mat-divider></mat-divider>
+
+        <div class="card-block">
+          <div class="card-header-title" (click)="openAllUsers(subs, profile.user?.subscribers)">
+            <span class="card-title">{{subs}}</span>
+            <span class="card-count"> {{profile.user?.subscribers?.length}}</span>
+          </div>
+
+          <div class="card-content">
+            <mat-list>
+              <mat-list-item *ngFor="let subLink of profile.user?.subscribers?.slice(0,2)"
+                (click)="goToAnyPage(subLink.subscriber)">
+                <img matListItemAvatar [src]="urlAvatar(subLink.subscriber?.avatar)">
+                <div matListItemTitle>
+                  {{subLink.subscriber?.firstname}} {{subLink.subscriber?.lastname}}
+                </div>
+              </mat-list-item>
+            </mat-list>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="profile.user?.groups?.length" class="card body-block__card-body groups-card">
+        <div class="card-header-title" (click)="openAllGroups(groups, profile.user?.groups)">
+          <span class="card-title">{{groups}}</span>
+          <span class="card-count"> {{profile.user?.groups?.length}}</span>
+        </div>
+
+        <div *ngIf="profile.user" class="card-content">
+          <mat-list>
+            <mat-list-item *ngFor="let groupLink of profile.user.groups?.slice(0,4)"
+              (click)="goToGroup(groupLink.group)">
+              <img matListItemAvatar [src]="urlAvatar(groupLink.group.avatar,defaulNoPhoto )">
+              <div matListItemTitle>{{groupLink.group.name}}</div>
+              <span matListItemLine>{{groupLink.group.type.name}}</span>
+            </mat-list-item>
+          </mat-list>
+        </div>
+      </div>
+
+
+      <div *ngIf="profile.user?.portfolios?.length" class="card body-block__card-body groups-card">
+        <div (click)="openAllPortfolios()" class="card-header-title">
+          <span class="card-title">{{portfolios}}</span>
+          <span class="card-count"> {{profile.user?.portfolios?.length}}</span>
+        </div>
+
+        <div *ngIf="profile.user" class="card-content">
+          <mat-list>
+            <mat-list-item (click)="openPortfolio(portfolio)"
+              *ngFor="let portfolio of profile.user.portfolios?.slice(0,4)">
+              <mat-icon *ngIf="portfolio.material?.img" matListItemIcon>image</mat-icon>
+              <mat-icon *ngIf="portfolio.material?.file" matListItemIcon>description</mat-icon>
+              <div matListItemTitle>{{portfolio.name}}</div>
+              <span matListItemLine>{{portfolio.type?.name}} <span *ngIf="portfolio.value">• {{portfolio.value}}</span>
+              </span>
+            </mat-list-item>
+          </mat-list>
+        </div>
+      </div>
+    </div>
+
+
+    <div *ngIf="!checkViewUser()" class="card dashboard">
+      <apx-chart *ngIf="activityLineOption.initData" class="chart"
+        [series]="activityLineOption.series"
+        [chart]="activityLineOption.chart"
+        [xaxis]="activityLineOption.xaxis"
+        [yaxis]="activityLineOption.yaxis"
+        [stroke]="stroke"
+        [title]="activityLineOption.title">
+      </apx-chart>
+      <apx-chart *ngIf="activityRadarOption.initLabel&&activityRadarOption.initData" class="chart"
+        [series]="activityRadarOption.series"
+        [chart]="activityRadarOption.chart"
+        [xaxis]="activityRadarOption.xaxis"
+        [dataLabels]="activityRadarOption.dataLabels"
+        [title]="activityRadarOption.title">
+      </apx-chart>
+
+      <apx-chart *ngIf="activityColumnOption.initData" class="chart scatter"
+        [series]="activityColumnOption.series"
+        [chart]="activityColumnOption.chart"
+        [xaxis]="activityColumnOption.xaxis"
+        [fill]="activityColumnOption.fill"
+        [plotOptions]="activityColumnOption.plotOptions"
+        [stroke]="activityColumnOption.stroke"
+        [yaxis]="activityColumnOption.yaxis"
+        [title]="activityColumnOption.title">
+      </apx-chart>
+
+      <apx-chart class="chart"
+        *ngIf="donutOption.initData"
+        [series]="donutOption.series"
+        [chart]="donutOption.chart"
+        [labels]="donutOption.labels"
+        [fill]="donutOption.fill"
+        [dataLabels]="donutOption.dataLabels"
+        [responsive]="donutOption.responsive"
+        [title]="donutOption.title">
+      </apx-chart>
+      <apx-chart *ngIf="activityLine2Option.initData" class="chart"
+        [series]="activityLine2Option.series"
+        [chart]="activityLine2Option.chart"
+        [xaxis]="activityLine2Option.xaxis"
+        [yaxis]="activityLine2Option.yaxis"
+        [stroke]="stroke"
+        [title]="activityLine2Option.title">
+      </apx-chart>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,11 @@
+@import "../../styles.scss";
+
+.container {
+  max-width: 100vw;
+  min-height: calc(100vh - $heightHeader);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: $paddingValue 0;
+  gap: $paddingValue;
+}

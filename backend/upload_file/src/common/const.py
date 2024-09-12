@@ -1,0 +1,25 @@
+METHOD_ADD = "add"
+METHOD_GET_BY_ID = "get_by_id"
+METHOD_GET_ONE = "get_one"
+METHOD_GET_ALL = "get_all"
+METHOD_GET = "get"
+METHOD_UPDATE = "update"
+METHOD_DELETE = "delete"
+
+ALL = "all"
+ONE = "one"
+
+ROLE_USER = 1
+ROLE_ADMIN = 2
+ROLE_GROUP = 3
+ROLE_BOT = 4
+ROLE_EDITOR = 5
+
+DEFAULT_LIMIT = 100
+DEFAULT_OFFSET = 0
+VALUE_NOT_LESS = 0
+
+
+FILE_ENV = ".env"
+NAME_DIR = "public"
+NAME_STATIC = "/static"

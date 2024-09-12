@@ -1,0 +1,23 @@
+<h2 mat-dialog-title class="title">{{title}}</h2>
+<form [formGroup]="form" class="block">
+  <mat-form-field>
+    <mat-label>{{tagInput.label}}</mat-label>
+    <input [type]="tagInput.type" (keyup)="onKeyupTag()" [placeholder]="tagInput.placeholder" matInput
+      [formControl]="tagInput.formControl" [matAutocomplete]="auto">
+    <mat-autocomplete #auto="matAutocomplete">
+      <ng-container *ngFor="let tag of tagInput.values | async">
+        <mat-option [value]="tag.name" (click)="selectTag(tag)">
+          <span>{{tag.name}}</span>
+        </mat-option>
+      </ng-container>
+    </mat-autocomplete>
+    <mat-icon *ngIf="tagInput.icon && !tagInput.is_enable_btn" matSuffix>{{tagInput.icon}}</mat-icon>
+    <mat-error *ngIf="tagInput.formControl.invalid ">
+      {{tagInput.messageError()}}
+    </mat-error>
+  </mat-form-field>
+
+  <button [disabled]="form.invalid" mat-flat-button color="primary" (click)="save()">
+    <mat-icon>{{saveBtn.icon}}</mat-icon>{{saveBtn.title}}
+  </button>
+</form>

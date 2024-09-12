@@ -1,0 +1,21 @@
+@import "../../styles.scss";
+
+.example-card {
+  width: 100%;
+  border-radius: $borderRadius !important;
+  box-shadow: $boxShadow !important;
+
+  .example-header-image {
+    background-image: url("https://material.angular.io/assets/img/examples/shiba1.jpg");
+    background-size: cover;
+  }
+
+  mat-card-content {
+    display: flex;
+    flex-direction: column;
+    gap: $middleGap;
+    p {
+      text-align: justify;
+    }
+  }
+}

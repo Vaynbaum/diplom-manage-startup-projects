@@ -1,0 +1,40 @@
+<h2 mat-dialog-title class="title">{{title}}</h2>
+<mat-dialog-content>
+  <form [formGroup]="form" class="block">
+    <md-editor [upload]="doUpload" [height]="'300px'" formControlName="description">
+    </md-editor>
+    <mat-chip-set *ngIf="files.length>0" class="example-chip" cdkDropList cdkDropListOrientation="horizontal"
+      (cdkDropListDropped)="drop($event)">
+      <mat-chip cdkDrag highlighted color="accent" *ngFor="let file of files">
+        <mat-icon *ngIf="!checkIcon(file)" matChipAvatar fontIcon="description"></mat-icon>
+        <img matChipAvatar *ngIf="checkIcon(file)" [src]="compileURLImg(file.name)">
+        <!-- <mat-icon *ngIf="checkIcon(file)" matChipAvatar fontIcon="image"></mat-icon> -->
+        {{file.details.old_name}}
+        <button (click)="deleteFile(file)" matChipRemove>
+          <mat-icon>cancel</mat-icon>
+        </button>
+      </mat-chip>
+    </mat-chip-set>
+
+    <mat-chip-listbox>
+      <mat-chip-row matBadgeColor="primary" highlighted *ngFor="let tag of tags">
+        {{tag.tag?.name}}
+        <button (click)="deleteTag(tag)" matChipRemove>
+          <mat-icon>cancel</mat-icon>
+        </button>
+      </mat-chip-row>
+    </mat-chip-listbox>
+    <div class="actions">
+      <button (click)="addTag()" mat-button color="primary">
+        <mat-icon>{{addButton.icon}}</mat-icon>{{addButton.title}}
+      </button>
+      <button (click)="onOpenFileDialog('file-input')" mat-button color="primary">
+        <mat-icon>attach_file</mat-icon>Добавить файл
+      </button>
+      <input [ngStyle]="{'display':'none'}" (change)="fileChange($event)" id="file-input" type="file" />
+      <button class="save-btn" [disabled]="form.invalid" mat-flat-button color="primary" (click)="save()">
+        <mat-icon>{{saveBtn.icon}}</mat-icon>{{saveBtn.title}}
+      </button>
+    </div>
+  </form>
+</mat-dialog-content>

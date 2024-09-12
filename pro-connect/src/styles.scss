@@ -1,0 +1,73 @@
+@import "assets/styles/main.scss";
+p-image img, p-image .p-image {
+  border-radius: $borderRadius;
+}
+.p-galleria-item-nav {
+  z-index: 100;
+  transform: translateY(-50%);
+}
+html {
+  font-size: $htmlFontSize;
+}
+
+body {
+  background-color: $backgroundColor;
+}
+
+p {
+  padding: 0;
+  margin: 0;
+  text-align: justify;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI Regular";
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  margin: 0;
+  padding: 0;
+}
+
+@font-face {
+  font-family: "Segoe UI Regular";
+  src: url("assets/fonts/SegoeUI.eot");
+  src: url("assets/fonts/SegoeUI.eot?#iefix") format("embedded-opentype"),
+    url("assets/fonts/SegoeUI.woff") format("woff"),
+    url("assets/fonts/SegoeUI.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+mat-icon {
+  font-family: "Material Icons" !important;
+}
+
+a {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.mat-mdc-option {
+  padding: 0 16px !important;
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+}
+*::-webkit-scrollbar-track {
+  background: white; /* color of the tracking area */
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: darkgrey; /* color of the scroll thumb */
+  border-radius: 20px; /* roundness of the scroll thumb */
+  border: 2px solid white;
+}

@@ -1,0 +1,16 @@
+ADD_POST_FAILED = "Не удалось добавить новость"
+POSTS_EXCEPTION = "Не удалось получить посты"
+POSTS_NOT_FOUND = "Посты не найдены"
+TAG_NO_EXIST = "Нет такого тега"
+POST_UPD_SUCCEESS='Новость изменена'
+POST_UPD_GET_EXCEPTION='Не удалось получить пост'
+TAG_GET_EXCEPTION='Не удалось получить тег'
+POST_UPD_EXCEPTION='Не удалось изменить пост'
+POST_NOT_FOUND = "Пост не найден"
+DELETE_POST = "Пост удален"
+DELETE_POST_EXCEPTION='Не удалось удалить пост'
+DELETE_LIKE_EXCEPTION='Не удалось убрать лайк'
+ADD_LIKE_EXCEPTION='Не удалось поставить лайк'
+LIKE_EXCEPTION='Не удалось получить лайк'
+USER_POST_NOT_FOUND='Такого пользователя или поста нет'
+LIKE_EXIST='Лайк уже поставлен'

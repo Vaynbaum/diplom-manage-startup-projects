@@ -1,0 +1,11 @@
+@import "../../styles.scss";
+
+.card {
+  background: $whiteColor;
+  border-radius: $borderRadius;
+  box-shadow: $boxShadow;
+  padding: $paddingValue;
+  display: flex;
+  flex-direction: column;
+  gap: $middleGap;
+}

@@ -1,0 +1,62 @@
+<mat-card class="example-card">
+  <mat-card-header>
+    <!-- [ngStyle]="compileImg()" -->
+    <img (click)="goTo()" [src]="compileImg()"  mat-card-avatar class="example-header-image">
+    <mat-card-title-group>
+      <mat-card-title (click)="goTo()"><a>{{displayName()}}</a></mat-card-title>
+      <mat-card-subtitle>
+        {{post?.created_at | date:'dd.MM.yy HH:mm'}} • {{post?.type?.name}}
+      </mat-card-subtitle>
+      <button mat-icon-button [matMenuTriggerFor]="menu" *ngIf="isEdit">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button (click)="editPost()" mat-menu-item>
+          <mat-icon>edit</mat-icon>
+          <span>Изменить</span>
+        </button>
+        <button (click)="deletePost()" mat-menu-item>
+          <mat-icon>delete</mat-icon>
+          <span>Удалить</span>
+        </button>
+      </mat-menu>
+    </mat-card-title-group>
+  </mat-card-header>
+
+  <mat-card-content>
+    <markdown *ngIf="post?.text" [disableSanitizer]="true" ngPreserveWhitespaces [data]="post?.text" [emoji]="true">
+    </markdown>
+    <p-galleria *ngIf="images&& images.length>0" #galleria  [value]="images" [numVisible]="5" [circular]="true"
+      [showItemNavigators]="true" [showThumbnails]="false" [responsiveOptions]="responsiveOptions"
+      [containerStyle]="{'max-width': '640px'}">
+      <ng-template  pTemplate="item" let-item>
+        <img *ngIf="item.itemImageSrc" [ngStyle]="compileMaxHeight()" class="front" [src]="item.itemImageSrc" />
+        <img *ngIf="item.itemImageSrcBlur" [ngStyle]="compileMaxHeight()" class="back" [src]="item.itemImageSrcBlur" />
+      </ng-template>
+    </p-galleria>
+
+    <mat-list *ngIf="post && post.materials.files && post.materials.files.length > 0">
+      <mat-list-item (click)="redirectLink(file.name)" *ngFor="let file of post?.materials?.files">
+        <mat-icon matListItemIcon>description</mat-icon>
+        <div matListItemTitle>{{file.details.old_name}}</div>
+      </mat-list-item>
+    </mat-list>
+
+    <mat-chip-listbox *ngIf="post&&post?.tags&& post.tags.length>0">
+      <mat-chip highlighted *ngFor="let tag_link of post?.tags">
+        {{tag_link.tag?.name}}
+      </mat-chip>
+    </mat-chip-listbox>
+
+
+  </mat-card-content>
+
+  <mat-card-actions >
+    <mat-chip-listbox *ngIf="checkUser()">
+      <mat-chip-row [highlighted]="checkMyLike()" color="warn" (click)="likePost()">
+        <mat-icon [ngStyle]="setToCenter()" matChipAvatar>favorite</mat-icon>
+        <span *ngIf="post && post.cnt_like>0">{{post.cnt_like}}</span>
+      </mat-chip-row>
+    </mat-chip-listbox>
+  </mat-card-actions>
+</mat-card>

@@ -1,0 +1,267 @@
+<div class="container">
+  <mat-accordion multi>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <a [routerLink]="[profileSublock.backButton.link]" class="back-btn" mat-button>
+          <mat-icon [fontIcon]="profileSublock.backButton.icon"></mat-icon>
+        </a>
+        <mat-panel-title>
+
+          <h3 class="title">{{profileSublock.title}}</h3>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <form [formGroup]="form">
+        <mat-form-field *ngFor="let input of inputs">
+          <mat-label>{{input.label}}</mat-label>
+          <input *ngIf="!input.is_date" matInput [type]="input.type" [placeholder]="input.placeholder"
+            [formControl]="input.formControl">
+          <button *ngIf="input.is_enable_btn" mat-icon-button matSuffix (click)="input.action_btn()">
+            <mat-icon>{{input.icon}}</mat-icon>
+          </button>
+          <mat-icon *ngIf="input.icon && !input.is_enable_btn" matSuffix>{{input.icon}}</mat-icon>
+          <mat-error *ngIf="input.formControl.invalid ">
+            {{input.messageError()}}
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field *ngIf="checkUser()">
+          <mat-label>{{birthdateInput.label}}</mat-label>
+          <input matInput [placeholder]="birthdateInput.placeholder" [matDatepicker]="picker"
+            [formControl]="birthdateInput.formControl">
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker [touchUi]="true"></mat-datepicker>
+          <mat-error *ngIf="birthdateInput.formControl.invalid ">
+            {{birthdateInput.messageError()}}
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field *ngIf="checkUser()">
+          <mat-label>{{cityInput.label}}</mat-label>
+          <input [type]="cityInput.type" (keyup)="onKeyupCity()" [placeholder]="cityInput.placeholder" matInput
+            [formControl]="cityInput.formControl" [matAutocomplete]="auto2">
+          <mat-autocomplete #auto2="matAutocomplete">
+            <ng-container *ngFor="let city of cityInput.values | async">
+              <mat-option [value]="city.name" (click)="selectCity(city)">
+                <span>{{city.name}}</span>
+                <small *ngIf="city.region"> ({{city.region.name}})</small>
+              </mat-option>
+            </ng-container>
+          </mat-autocomplete>
+          <mat-icon *ngIf="cityInput.icon && !cityInput.is_enable_btn" matSuffix>{{cityInput.icon}}</mat-icon>
+          <mat-error *ngIf="cityInput.formControl.invalid ">
+            {{cityInput.messageError()}}
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field *ngIf="showRegion">
+          <mat-label>{{regionInput.label}}</mat-label>
+          <input [type]="regionInput.type" (keyup)="onKeyupRegion()" [placeholder]="regionInput.placeholder" matInput
+            [formControl]="regionInput.formControl" [matAutocomplete]="auto1">
+          <mat-autocomplete #auto1="matAutocomplete">
+            <ng-container *ngFor="let region of regionInput.values | async">
+              <mat-option [value]="region.name" (click)="selectRegion(region)">
+                <span>{{region.name}}</span>
+              </mat-option>
+            </ng-container>
+          </mat-autocomplete>
+          <mat-icon *ngIf="regionInput.icon && !regionInput.is_enable_btn" matSuffix>{{regionInput.icon}}</mat-icon>
+          <mat-error *ngIf="regionInput.formControl.invalid ">
+            {{regionInput.messageError()}}
+          </mat-error>
+        </mat-form-field>
+      </form>
+
+      <mat-action-row>
+        <button (click)="deleteProfile()" mat-button color="primary">
+          <mat-icon>{{deleteProfileBtn.icon}}</mat-icon>{{deleteProfileBtn.title}}
+        </button>
+        <button (click)="changePassword()" mat-button color="primary">
+          <mat-icon>{{changePasswordBtn.icon}}</mat-icon>{{changePasswordBtn.title}}
+        </button>
+        <button (click)="changeEmail()" mat-button color="primary">
+          <mat-icon>{{changeEmailBtn.icon}}</mat-icon>{{changeEmailBtn.title}}
+        </button>
+        <button (click)="saveProfile()" [disabled]="form.invalid" mat-flat-button color="primary">
+          <mat-icon>{{profileSublock.saveButton.icon}}</mat-icon>{{profileSublock.saveButton.title}}
+        </button>
+      </mat-action-row>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel *ngIf="checkUser()">
+      <mat-expansion-panel-header>
+        <mat-panel-title class="header">
+          <h3 class="title">{{contactSublock.title}}</h3>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <form>
+        <div class="contact-row" *ngFor="let row of userContacts">
+          <mat-form-field>
+            <mat-label>{{contactSublock.field}}</mat-label>
+            <input matInput [formControl]="row.formControl" readonly>
+          </mat-form-field>
+
+          <button mat-icon-button [matMenuTriggerFor]="menu">
+            <mat-icon>{{contactSublock.menu.icon}}</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button *ngFor="let btn of contactSublock.menu.btns" mat-menu-item (click)="btn.actions(row)">
+              <mat-icon>{{btn.icon}}</mat-icon>
+              <span>{{btn.title}}</span>
+            </button>
+          </mat-menu>
+        </div>
+      </form>
+
+      <mat-action-row>
+        <button mat-button (click)="addContact()" color="primary">
+          <mat-icon>{{contactSublock.addButton.icon}}</mat-icon>{{contactSublock.addButton.title}}
+        </button>
+        <button (click)="saveContacts()" mat-flat-button color="primary">
+          <mat-icon>{{contactSublock.saveButton.icon}}</mat-icon>{{contactSublock.saveButton.title}}
+        </button>
+      </mat-action-row>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel *ngIf="checkUser()">
+      <mat-expansion-panel-header>
+        <mat-panel-title class="header">
+          <h3 class="title">{{skillSublock.title}}</h3>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <mat-chip-listbox>
+        <mat-chip-row (click)="editSkill(tag_link)" [matBadge]="tag_link.level?.icon" matBadgeColor="accent" highlighted
+          *ngFor="let tag_link of userSkills">
+          {{tag_link.tag?.name}}
+          <button matChipRemove (click)="deleteSkill(tag_link)">
+            <mat-icon>{{skillSublock.deleteButton.icon}}</mat-icon>
+          </button>
+        </mat-chip-row>
+      </mat-chip-listbox>
+
+      <mat-action-row>
+        <button mat-button (click)="addSkill()" color="primary">
+          <mat-icon>{{skillSublock.addButton.icon}}</mat-icon>{{skillSublock.addButton.title}}
+        </button>
+        <button (click)="saveSkills()" mat-flat-button color="primary">
+          <mat-icon>{{skillSublock.saveButton.icon}}</mat-icon>{{skillSublock.saveButton.title}}
+        </button>
+      </mat-action-row>
+    </mat-expansion-panel>
+
+
+    <mat-expansion-panel *ngIf="checkUser()">
+      <mat-expansion-panel-header>
+        <mat-panel-title class="header">
+          <h3 class="title">{{portfolioSublock.title}}</h3>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div class="items">
+        <div class="item" *ngFor="let portfolio of profile.user?.portfolios">
+          <div (click)="openPortfolio(portfolio)" class="left-part portfolio">
+            <mat-icon class="img" *ngIf="portfolio.material?.img" matListItemIcon>image</mat-icon>
+            <mat-icon class="img" *ngIf="portfolio.material?.file" matListItemIcon>description</mat-icon>
+            <div class="info">
+              <div class="fullname">
+                {{portfolio.name}}
+              </div>
+              <div>{{portfolio.type?.name}} <span *ngIf="portfolio.value">• {{portfolio.value}}</span></div>
+            </div>
+          </div>
+
+          <div class="left-part">
+            <button mat-icon-button [matMenuTriggerFor]="menupr">
+              <mat-icon>{{portfolioSublock.menu.icon}}</mat-icon>
+            </button>
+            <mat-menu #menupr="matMenu">
+              <ng-container *ngFor="let btn of portfolioSublock.menu.btns">
+                <button (click)="btn.actions(portfolio)" mat-menu-item>
+                  <mat-icon>{{btn.icon}}</mat-icon>
+                  <span>{{btn.title}}</span>
+                </button>
+              </ng-container>
+            </mat-menu>
+          </div>
+        </div>
+      </div>
+
+      <mat-action-row>
+        <button (click)="addPortfolio()" mat-flat-button color="primary">
+          <mat-icon>{{portfolioSublock.addButton.icon}}</mat-icon>{{portfolioSublock.addButton.title}}
+        </button>
+      </mat-action-row>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel *ngIf="checkUser()">
+      <mat-expansion-panel-header>
+        <mat-panel-title class="header">
+          <h3 class="title">{{responseSublock.title}}</h3>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div class="items">
+        <div class="item" *ngFor="let vacancy of profile.user?.my_vacancies">
+          <div (click)="openGroup(vacancy.vacancy.group)" class="left-part response">
+            <img [src]="urlAvatar(vacancy.vacancy.group.avatar)">
+            <div class="info ">
+              <div class="fullname ">
+                {{vacancy.vacancy.group.name}} • {{vacancy.vacancy.name}}
+              </div>
+              <div class="other-info">Отклик: {{vacancy.created_at|date:"dd MMMM yyyy HH:mm,"}}
+                <span [ngStyle]="getColor(vacancy.is_approved)">
+                  {{getStatus(vacancy.is_approved)}}
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="left-part">
+            <button (click)="delRequestVac(vacancy)" mat-icon-button>
+              <mat-icon>{{responseSublock.btn.icon}}</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel *ngIf="checkUser()">
+      <mat-expansion-panel-header>
+        <mat-panel-title class="header">
+          <h3 class="title">{{inviteresponseSublock.title}}</h3>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div class="items">
+        <div class="item" *ngFor="let invite of profile.user?.invites">
+          <div (click)="openGroup(invite.group)" class="left-part response">
+            <img [src]="urlAvatar(invite.group.avatar)">
+            <div class="info ">
+              <div class="fullname ">
+                {{invite.group.name}}
+              </div>
+              <div class="other-info">Отклик: {{invite.created_at|date:"dd MMMM yyyy HH:mm,"}}
+                <span [ngStyle]="getColor(invite.is_approved)">
+                  {{getStatus(invite.is_approved)}}
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="left-part">
+            <button mat-icon-button [matMenuTriggerFor]="menuprinv">
+              <mat-icon>{{inviteresponseSublock.menu.icon}}</mat-icon>
+            </button>
+            <mat-menu #menuprinv="matMenu">
+              <ng-container *ngFor="let btn of inviteresponseSublock.menu.btns">
+                <button *ngIf="btn.check(invite)" (click)="btn.actions(invite)" mat-menu-item>
+                  <mat-icon>{{btn.icon}}</mat-icon>
+                  <span>{{btn.title}}</span>
+                </button>
+              </ng-container>
+            </mat-menu>
+          </div>
+        </div>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>

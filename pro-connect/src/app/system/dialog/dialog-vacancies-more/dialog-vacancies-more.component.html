@@ -1,0 +1,13 @@
+<h2 mat-dialog-title class="title">{{data.title}}
+  <span class="card-count"> {{data.items.length}}</span>
+</h2>
+
+<mat-dialog-content class="block">
+  <mat-list>
+    <mat-list-item (click)="openVacancy(item)" *ngFor="let item of data.items">
+      <div matListItemTitle>{{item.name}}</div>
+      <span *ngIf="item.description" matListItemLine>Открыта с {{item.created_at|date:'dd MMMM yyyy HH:mm'}}
+      </span>
+    </mat-list-item>
+  </mat-list>
+</mat-dialog-content>

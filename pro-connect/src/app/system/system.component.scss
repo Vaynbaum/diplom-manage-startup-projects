@@ -1,0 +1,21 @@
+@import "../../styles.scss";
+$widthSidenav: 230px;
+$widthContainerMapMobile: 395px;
+$widthContainerMapPC: 490px;
+$heightSidenavContainer: calc(100vh - $heightHeader);
+
+main {
+  margin-top: $heightHeader;
+  position: relative;
+  width: 100%;
+}
+mat-sidenav-container {
+  min-height: $heightSidenavContainer;
+}
+mat-sidenav {
+  width: $widthSidenav;
+  padding: $paddingValue;
+}
+mat-sidenav-content {
+  height: 100%;
+}

@@ -1,0 +1,94 @@
+@import "../../styles.scss";
+
+$font-size-header: 2rem;
+$max-width-form: 400px;
+$containerPadding: 3rem;
+
+.login-with {
+  color: $gray;
+}
+
+.container {
+  display: flex;
+  max-width: 100vw;
+  min-height: 100vh;
+  gap: $paddingValue;
+  padding: $containerPadding 0;
+
+  .auth-block,
+  .auth-image {
+    max-width: $max-width-form;
+  }
+
+  .auth-image {
+    img {
+      width: 100%;
+    }
+  }
+
+  .auth-block {
+    display: flex;
+    flex-direction: column;
+    gap: $middleGap;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .auth-block {
+    h3 {
+      font-size: $font-size-header;
+    }
+    form,
+    .links,
+    form mat-form-field {
+      width: 100%;
+    }
+
+    .links {
+      display: flex;
+      justify-content: space-between;
+
+      button {
+        padding: 0 $middlePaddingValue;
+      }
+    }
+  }
+}
+@media (min-width: 0px) {
+  .container {
+    flex-direction: column;
+    align-items: center;
+
+    .auth-image,
+    .auth-block {
+      width: 85%;
+    }
+
+    .links {
+      flex-direction: column;
+    }
+  }
+}
+
+@media (min-width: 360px) {
+  .container .links {
+    flex-direction: row;
+  }
+}
+
+@media (min-width: $minWidthTablet) {
+  .container {
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: unset;
+
+    .auth-image,
+    .auth-block {
+      width: 40%;
+    }
+  }
+}

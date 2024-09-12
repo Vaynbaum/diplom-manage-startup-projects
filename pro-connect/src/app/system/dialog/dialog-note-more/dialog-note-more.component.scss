@@ -1,0 +1,23 @@
+@import "../../../../styles.scss";
+@import "../../../../assets/styles/dialog-more.scss";
+.date-container {
+  display: flex;
+  flex-direction: column;
+  gap: $smallGap;
+  .date_pipe {
+    font-size: 18px;
+    align-self: center;
+  }
+
+  .message-content {
+    display: flex;
+    flex-direction: column;
+    color: black;
+    // align-items: baseline;
+
+    .message-create {
+      font-size: 10px;
+      color: $gray;
+    }
+  }
+}

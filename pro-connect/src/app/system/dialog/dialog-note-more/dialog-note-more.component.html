@@ -1,0 +1,14 @@
+<h2 mat-dialog-title class="title">{{title}}</h2>
+<mat-dialog-content class="block" id="block" (scroll)="onScroll($event)">
+  <div class="date-container" *ngFor="let dateItem of notes | groupByDate:false">
+    <mat-chip class="date_pipe" highlighted>
+      {{dateItem.key| date:'dd MMMM yyyy'}}
+    </mat-chip>
+    <div *ngFor="let message of dateItem.value" class="message-content">
+      <span> {{message.text}}</span>
+      <span class="message-create">
+        {{message.created_at|date:'HH:mm'}}<span *ngIf="message.is_readed">, прочитано</span>
+      </span>
+    </div>
+  </div>
+</mat-dialog-content>

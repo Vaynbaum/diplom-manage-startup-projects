@@ -1,0 +1,37 @@
+<header>
+  <img  *ngIf="!this.setting.isMobile" src="../../../../assets/images/logo.svg" alt="">
+  <button (click)="menuOnClick()" *ngIf="this.setting.isMobile" mat-icon-button>
+    <mat-icon>{{menuBtn.icon}}</mat-icon>
+  </button>
+  <div class="right-block">
+    <button (click)="readLastNote()" mat-icon-button [matMenuTriggerFor]="menuN">
+      <mat-icon [matBadge]="getunreaded()" matBadgeOverlap="false">{{noteBtn.icon}}
+      </mat-icon>
+    </button>
+    <mat-menu #menuN="matMenu">
+      <div iv *ngFor="let note of notifications.slice(0,4); let last = last" class="note-block">
+        <div [ngStyle]="readedColor(note)" class="note-block-text">{{note.text}}</div>
+        <div class="note-block-date">
+          {{note.created_at | date:'dd MMMM YYYY г. в HH:mm'}}
+          <span *ngIf="note.is_readed">✔</span>
+        </div>
+        <mat-divider *ngIf="!last || notifications.length>4"></mat-divider>
+      </div>
+      <button (click)="showMore()" class="btn-more-note" color="primary" *ngIf="notifications.length>4" mat-menu-item>
+        Показать все
+      </button>
+      <div *ngIf="notifications.length === 0" class="note-block">
+        <div>Нет уведомлений</div>
+      </div>
+    </mat-menu>
+
+    <button [matMenuTriggerFor]="menu" class="avatar" mat-icon-button>
+      <img [src]="urlAvatar(profile.avatar)">
+    </button>
+    <mat-menu #menu="matMenu">
+      <button *ngFor="let btn of menuAvaBtns" (click)="btn.action()" mat-menu-item>{{btn.title}}
+        <mat-icon>{{btn.icon}}</mat-icon>
+      </button>
+    </mat-menu>
+  </div>
+</header>

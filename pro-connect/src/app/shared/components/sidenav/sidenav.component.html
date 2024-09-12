@@ -1,0 +1,7 @@
+<div class="links">
+  <a [routerLink]="[link.link]" routerLinkActive #rla="routerLinkActive" mat-button class="link"
+    *ngFor="let link of links" [ngStyle]="drawerColor(rla.isActive)" color="basic">
+    <mat-icon>{{link.icon}}</mat-icon>
+    <span>{{link.name}}</span>
+  </a>
+</div>

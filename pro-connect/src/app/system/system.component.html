@@ -1,0 +1,13 @@
+<app-header (MenuOnClick)="sidenav.toggle()"></app-header>
+<main>
+  <mat-sidenav-container [hasBackdrop]="selectBackdrop()">
+    <mat-sidenav #sidenav [disableClose]="!setting.isMobile" [mode]="selectModeSidenav()"
+      [opened]="!setting.isMobile">
+      <app-sidenav></app-sidenav>
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</main>

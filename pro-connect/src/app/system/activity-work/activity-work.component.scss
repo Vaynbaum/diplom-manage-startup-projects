@@ -1,0 +1,234 @@
+@import "../../../styles.scss";
+@import "../../../assets/styles/common-page.scss";
+@import "../../../assets/styles/common-card.scss";
+@import "../../../assets/styles/profile.scss";
+
+.main-card {
+  padding: $paddingValue 0 0;
+  width: 90%;
+  max-width: 1000px;
+  gap: 0;
+  position: relative;
+  .example-tab-icon {
+    margin-right: 8px;
+  }
+
+  .card-header-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .title {
+      font-size: 20px;
+      font-weight: 500;
+    }
+    .back-btn {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+  }
+
+  mat-tab-group {
+    display: flex;
+    flex-direction: column;
+    gap: $paddingValue;
+  }
+
+  .message-page {
+    display: flex;
+    flex-direction: column;
+    gap: $middleGap;
+
+    mat-form-field {
+      width: 100%;
+      textarea {
+        resize: none;
+        overflow: hidden;
+      }
+    }
+    .message-container {
+      display: flex;
+      flex-direction: column;
+      gap: $middleGap;
+      max-height: 300px;
+      overflow-y: scroll;
+
+      .date-container {
+        display: flex;
+        flex-direction: column;
+        gap: $smallGap;
+
+        .date_pipe {
+          font-size: 18px;
+          align-self: center;
+        }
+
+        .message-row {
+          width: max-content;
+          max-width: 80%;
+          display: flex;
+          gap: $smallGap;
+
+          img {
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+          }
+
+          .message {
+            padding: $smallGap $middleGap;
+            border-radius: 15px;
+            cursor: pointer;
+            height: max-content;
+            .sender-name {
+              color: $mainBlue;
+              font-size: 12px;
+            }
+            .message-content {
+              display: flex;
+              flex-wrap: wrap;
+              justify-content: end;
+              gap: $smallGap;
+              align-items: baseline;
+
+              .message-create {
+                font-size: 10px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .task-page {
+    display: flex;
+    flex-direction: column;
+
+    mat-tab-group {
+      padding: 0;
+      gap: 0;
+      margin-top: 0;
+
+      // mat-tab {
+      //   display: flex;
+      //   flex-direction: column;
+      //   gap: $paddingValue;
+      // }
+      .task {
+        width: 100%;
+        padding: 10px;
+        margin-top: $paddingValue;
+        markdown {
+          width: 100%;
+          max-height: 200px;
+          overflow: auto;
+        }
+
+        border-radius: 5px;
+        background: #d7d8d95c;
+        display: flex;
+        flex-direction: column;
+        gap: $middleGap;
+
+        .task-header {
+          display: flex;
+          width: 100%;
+          justify-content: space-between;
+          align-items: center;
+          h3 {
+            font-weight: 500;
+          }
+        }
+
+        .task-more {
+          width: 100%;
+          display: flex;
+          flex-wrap: wrap;
+          align-items: center;
+          gap: $middleGap;
+
+          .deadline {
+            display: flex;
+            align-items: center;
+            gap: $smallGap;
+          }
+        }
+
+        .actions {
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+
+          .left {
+            display: flex;
+            width: 100%;
+            gap: $smallGap;
+            align-items: center;
+
+            .info,
+            a,
+            div {
+              width: fit-content;
+              text-align: justify;
+            }
+
+            .info,
+            a {
+              color: $mainBlue;
+            }
+
+            a:hover {
+              text-decoration: underline;
+            }
+          }
+
+          .right {
+            display: flex;
+            gap: $smallGap;
+            align-items: center;
+            img {
+              border-radius: 50%;
+              transition: all 300ms ease;
+              width: 40px;
+            }
+            .ava {
+              position: relative;
+              border-radius: 50%;
+              width: 40px;
+              cursor: pointer;
+              mat-icon {
+                transition: all 300ms ease;
+                opacity: 0;
+                position: absolute;
+                z-index: 100;
+                top: 8px;
+                left: 8px;
+                color: white;
+              }
+            }
+            .ava:hover {
+              background: #000;
+              mat-icon {
+                opacity: 1;
+              }
+
+              img {
+                opacity: 0.7;
+              }
+            }
+          }
+        }
+
+        .description {
+          text-align: justify;
+        }
+      }
+    }
+    .add-task {
+      width: max-content;
+      padding: 0 10px;
+    }
+  }
+}

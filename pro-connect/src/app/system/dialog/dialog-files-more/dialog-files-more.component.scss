@@ -1,0 +1,15 @@
+@import "../../../../styles.scss";
+@import "../../../../assets/styles/dialog-more.scss";
+mat-list {
+  .subtitle {
+    margin-bottom: 0;
+  }
+  padding: 0;
+  mat-list-item {
+    cursor: pointer !important;
+
+    mat-icon {
+      margin-right: 16px;
+    }
+  }
+}

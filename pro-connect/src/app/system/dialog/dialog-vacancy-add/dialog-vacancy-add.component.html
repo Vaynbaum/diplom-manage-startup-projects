@@ -1,0 +1,39 @@
+<h2 mat-dialog-title class="title">{{title}}</h2>
+<mat-dialog-content>
+  <form [formGroup]="form" class="block">
+    <mat-form-field *ngFor="let input of inputs">
+      <mat-label>{{input.label}}</mat-label>
+      <input *ngIf="input.type!='textarea'" matInput [type]="input.type" [placeholder]="input.placeholder"
+        [formControl]="input.formControl">
+
+      <textarea rows="5" *ngIf="input.type=='textarea'" matInput [type]="input.type" [placeholder]="input.placeholder"
+        [formControl]="input.formControl">
+      </textarea>
+
+      <mat-icon matSuffix>{{input.icon}}</mat-icon>
+      <mat-error *ngIf="input.formControl.invalid">
+        {{input.messageError()}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-slide-toggle (change)="onChange()" formControlName="isActive">{{isOpen()}}</mat-slide-toggle>
+    <mat-chip-listbox>
+      <mat-chip-row (click)="editTag(tag_link)"  [matBadge]="tag_link.level?.icon" matBadgeColor="accent" highlighted
+        *ngFor="let tag_link of data.vacancy?.tags">
+        {{tag_link.tag?.name}}
+        <button matChipRemove (click)="deleteTag(tag_link)">
+          <mat-icon>cancel</mat-icon>
+        </button>
+      </mat-chip-row>
+    </mat-chip-listbox>
+
+    <div class="btns">
+      <button mat-button color="primary" (click)="addTag()">
+        <mat-icon>add</mat-icon>Добавить навык
+      </button>
+      <button [disabled]="form.invalid" mat-flat-button color="primary" (click)="save()">
+        <mat-icon>{{saveBtn.icon}}</mat-icon>{{saveBtn.title}}
+      </button>
+    </div>
+  </form>
+</mat-dialog-content>

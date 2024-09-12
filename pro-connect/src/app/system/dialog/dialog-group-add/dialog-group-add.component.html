@@ -1,0 +1,27 @@
+<h2 mat-dialog-title class="title">{{title}}</h2>
+<form [formGroup]="form" class="block">
+
+  <mat-form-field *ngFor="let inp of inps">
+    <mat-label>{{inp.label}}</mat-label>
+    <input matInput [type]="inp.type" [placeholder]="inp.placeholder" [formControl]="inp.formControl">
+    <mat-icon matSuffix>{{inp.icon}}</mat-icon>
+    <mat-error *ngIf="inp.formControl.invalid">
+      {{inp.messageError()}}
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>{{typeInput.label}}</mat-label>
+    <mat-select [formControl]="typeInput.formControl">
+      <mat-option (click)="selectType(t)" *ngFor="let t of typeInput.items" [value]="t.name">{{t.name}}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="typeInput.formControl.invalid">
+      {{typeInput.messageError()}}
+    </mat-error>
+  </mat-form-field>
+
+  <button [disabled]="form.invalid" mat-flat-button color="primary" (click)="save()">
+    <mat-icon>{{saveBtn.icon}}</mat-icon>{{saveBtn.title}}
+  </button>
+</form>

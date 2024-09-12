@@ -1,0 +1,6 @@
+venv
+.env
+pycache/
+*.py[cod]
+*$py.class
+laboratory

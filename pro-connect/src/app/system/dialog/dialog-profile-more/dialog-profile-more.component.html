@@ -1,0 +1,38 @@
+<h2 mat-dialog-title class="title">{{title}}</h2>
+<mat-dialog-content class="block">
+  <div class="field">
+    <mat-icon>{{link.icon}}</mat-icon><a [routerLink]="[link.link]">{{link.data}}</a>
+  </div>
+  <mat-divider *ngIf="link.needDiv"></mat-divider>
+
+  <div *ngIf="calendar.show" class="field">
+    <mat-icon>{{calendar.icon}}</mat-icon>{{calendar.title}}
+    <span class="info">{{calendar.data|date:calendar.mask}}</span>
+  </div>
+  <div *ngIf="location.show" class="field">
+    <mat-icon>{{location.icon}}</mat-icon>{{location.title}}
+    <span class="info">{{location.data}}</span>
+  </div>
+  <mat-divider *ngIf="isNeedTwoDivider()"></mat-divider>
+
+  <div *ngIf="contact.show" class="subblock">
+    <h3>{{contact.title}}</h3>
+    <div *ngFor="let contactLink of contact.items" class="field">
+      <mat-icon *ngIf="isNeedIcon(contactLink.contact?.icon)" matListItemIcon>{{contactLink.contact?.icon}}</mat-icon>
+      <img *ngIf="!isNeedIcon(contactLink.contact?.icon)" matListItemAvatar
+        [src]="compileImgLogoContact(contactLink.contact?.icon)">
+      {{contactLink.contact?.title}}: <a (click)="redirectValue(contactLink)">{{splitLink(contactLink)}}</a>
+    </div>
+  </div>
+  <mat-divider *ngIf="isNeedThreeDivider()"></mat-divider>
+
+  <div class="subblock" *ngIf="skill.show">
+    <h3>{{skill.title}}</h3>
+    <mat-chip-listbox>
+      <mat-chip-row (click)="onClickChip(tag_link)" [matBadge]="tag_link.level?.icon" matBadgeColor="accent" highlighted
+        *ngFor="let tag_link of data.profile.user?.tags">
+        {{tag_link.tag?.name}}
+      </mat-chip-row>
+    </mat-chip-listbox>
+  </div>
+</mat-dialog-content>

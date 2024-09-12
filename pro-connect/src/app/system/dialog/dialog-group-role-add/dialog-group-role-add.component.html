@@ -1,0 +1,16 @@
+<h2 mat-dialog-title class="title">{{title}}</h2>
+
+<form [formGroup]="form" class="block">
+  <mat-form-field>
+    <mat-label>{{roleInput.label}}</mat-label>
+    <input matInput [type]="roleInput.type" [placeholder]="roleInput.placeholder" [formControl]="roleInput.formControl">
+    <mat-icon matSuffix>{{roleInput.icon}}</mat-icon>
+    <mat-error *ngIf="roleInput.formControl.invalid">
+      {{roleInput.messageError()}}
+    </mat-error>
+  </mat-form-field>
+
+  <button [disabled]="form.invalid" mat-flat-button color="primary" (click)="save()">
+    <mat-icon>{{saveBtn.icon}}</mat-icon>{{saveBtn.title}}
+  </button>
+</form>

@@ -1,0 +1,263 @@
+@import "../../styles.scss";
+
+$smallHeightCard: 450px;
+$heightCard: 600px;
+$fontSizeProfileName: 1.5rem;
+$fontSizeTitleName: 1rem;
+$heightCoverPhone: 55%;
+$heightCoverTablet: 70%;
+$heightCoverNotebook: 80%;
+$bodyBlockCardBody: 345px;
+
+.profile-card {
+  width: 90%;
+  max-width: $maxWidthCard;
+  padding: 0;
+
+  .cover,
+  .profile {
+    position: relative;
+    width: 100%;
+    border-radius: $borderRadius;
+  }
+
+  .cover {
+    background-position: center;
+    background-size: cover;
+
+    .cover-btn {
+      position: absolute;
+      padding: 0 $middlePaddingValue;
+
+      right: $paddingValue;
+      top: $paddingValue;
+    }
+  }
+
+  .profile {
+    display: flex;
+    background: white;
+    bottom: $paddingValue;
+    padding: $paddingValue $paddingValue 0 $paddingValue;
+
+    .profile-ava {
+      position: absolute;
+      cursor: pointer;
+    }
+
+    .profile-ava {
+      border-radius: 50%;
+      height: $sizeAvatar;
+      width: $sizeAvatar;
+      top: calc(0px - calc($sizeAvatar / 2));
+    }
+
+    .profile-info {
+      display: flex;
+      width: 100%;
+      gap: $paddingValue;
+
+      .profile-left {
+        display: flex;
+        flex-direction: column;
+        gap: $paddingValue;
+
+        .profile-name {
+          font-size: $fontSizeProfileName;
+          font-weight: bold;
+        }
+
+        .profile-special,
+        .profile-city,
+        .profile-subtitle {
+          display: flex;
+          align-items: center;
+        }
+
+        .profile-subtitle {
+          flex-wrap: wrap;
+          gap: $smallGap;
+
+          .more-btn {
+            padding: 0 $middlePaddingValue;
+          }
+        }
+
+        .profile-special,
+        .profile-city {
+          gap: $smallGap;
+        }
+      }
+    }
+  }
+}
+
+.body-block {
+  width: 90%;
+  max-width: $maxWidthCard;
+  padding: 0;
+  display: flex;
+  gap: $paddingValue;
+
+  .left-column,
+  .right-column {
+    display: flex;
+    gap: $paddingValue;
+    flex-direction: column;
+  }
+
+  .left-column {
+    .add-post {
+      padding: $middleGap $paddingValue;
+    }
+  }
+
+  .body-block__card-body {
+    height: $bodyBlockCardBody;
+
+    width: 100%;
+
+    .card-block {
+      display: flex;
+      flex-direction: column;
+      gap: $middleGap;
+      height: 47%;
+    }
+
+    .card-header-title {
+      cursor: pointer;
+      .card-title {
+        font-size: $fontSizeTitleName;
+        font-weight: bold;
+      }
+      .card-count {
+        color: $gray;
+      }
+    }
+
+    .card-content {
+      overflow-y: auto;
+      mat-list {
+        padding: 0;
+
+        mat-list-item {
+          cursor: pointer !important;
+
+          img {
+            margin: 0 10px 0 0;
+            align-self: center;
+          }
+
+          mat-icon {
+            margin: 0 18px 0 8px;
+            align-self: center;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: 0px) {
+  .profile-card {
+    height: $heightCard;
+
+    .cover {
+      height: $heightCoverPhone;
+    }
+
+    .profile {
+      height: calc(100% - $heightCoverPhone);
+      justify-content: unset;
+      align-items: center;
+      flex-direction: column;
+
+      .profile-info {
+        flex-wrap: nowrap;
+        align-items: unset;
+        flex-direction: column;
+        margin-left: 0;
+        margin-top: calc($sizeAvatar / 2);
+        justify-content: center;
+
+        .profile-left {
+          align-items: center;
+          .profile-subtitle {
+            justify-content: center;
+          }
+        }
+
+        .profile-btn {
+          width: 100%;
+          padding: 0 $middlePaddingValue;
+        }
+      }
+    }
+  }
+  .body-block {
+    flex-direction: column-reverse;
+
+    .left-column,
+    .right-column {
+      width: 100%;
+    }
+  }
+}
+
+@media (min-width: $minWidthTablet) {
+  .profile-card {
+    .cover {
+      height: $heightCoverTablet;
+    }
+
+    .profile {
+      height: calc(100% - $heightCoverTablet);
+      align-items: flex-start;
+      justify-content: flex-start;
+      flex-direction: row;
+
+      .profile-info {
+        flex-wrap: wrap;
+        align-items: flex-start;
+        flex-direction: row;
+        margin-top: 0px;
+        margin-left: calc($paddingValue + $sizeAvatar);
+        justify-content: space-between;
+
+        .profile-left {
+          align-items: unset;
+
+          .profile-subtitle {
+            justify-content: unset;
+          }
+        }
+      }
+    }
+  }
+
+  .body-block {
+    flex-direction: row;
+
+    .left-column {
+      width: calc(60% - calc($paddingValue / 2));
+    }
+
+    .right-column {
+      width: calc(40% - calc($paddingValue / 2));
+    }
+  }
+}
+
+@media (min-width: calc($minWidthNotebook + 60px)) {
+  .profile-card {
+    height: $smallHeightCard;
+
+    .cover {
+      height: $heightCoverNotebook;
+    }
+
+    .profile {
+      height: calc(100% - $heightCoverNotebook);
+    }
+  }
+}

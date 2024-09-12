@@ -1,0 +1,24 @@
+<h2 mat-dialog-title class="title">{{title}}</h2>
+<mat-dialog-content class="block">
+  <div class="items">
+
+    <div class="item" *ngFor="let res of responses">
+      <div (click)="goToUser(res.user)" class="left-part">
+        <div>
+          <img [src]="urlAvatar(res.user.avatar)">
+        </div>
+        <div class="info">
+          <div class="fullname">
+            {{res.user.firstname}} {{res.user.lastname}}
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="data.canUnassign" class="left-part">
+        <button (click)="unassign(res)" matTooltip="Кликните для удаления из назначенных" mat-icon-button>
+          <mat-icon>{{leaveBtn.icon}}</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>

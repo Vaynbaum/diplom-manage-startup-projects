@@ -1,0 +1,31 @@
+  <div class="container">
+    <div class="auth-image ">
+      <img [src]="src_image">
+    </div>
+    <div class="auth-block ">
+      <h3>{{title}}</h3>
+      <form [formGroup]="form">
+        <mat-form-field *ngFor="let field of inputs">
+          <mat-label>{{field.label}}</mat-label>
+
+          <input matInput [type]="field.type" [placeholder]="field.placeholder" [formControl]="field.formControl">
+
+          <button *ngIf="field.is_enable_btn" mat-icon-button matSuffix (click)="field.action_btn()">
+            <mat-icon>{{field.icon}}</mat-icon>
+          </button>
+
+          <mat-icon *ngIf="!field.is_enable_btn" matSuffix>{{field.icon}}</mat-icon>
+
+          <mat-error *ngIf="field.formControl.invalid && field.messageError">
+            {{field.messageError()}}
+          </mat-error>
+        </mat-form-field>
+      </form>
+
+      <div class="links">
+        <button *ngFor="let link of links" [routerLink]="link.link" mat-button color="accent">{{link.name}}</button>
+      </div>
+
+      <button (click)="signin()" [disabled]="form.invalid" mat-flat-button color="primary">{{nameButton}}</button>
+    </div>
+  </div>

@@ -1,0 +1,41 @@
+@import "../../../../styles.scss";
+@import "../../../../assets/styles/dialog-more.scss";
+form {
+  padding: 0;
+}
+.actions {
+  display: flex;
+  gap: $middleGap;
+
+  .save-btn {
+    padding: 0 10px;
+  }
+}
+.example-box.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.example-chip .cdk-drop-list-dragging {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+@media (min-width: 0px) {
+  .actions {
+    flex-direction: column;
+    align-items: center;
+
+    button {
+      margin: 0;
+      width: 100%;
+    }
+  }
+}
+
+@media (min-width: $minWidthTablet) {
+  .actions {
+    flex-direction: row;
+
+    button {
+      width: unset;
+    }
+  }
+}

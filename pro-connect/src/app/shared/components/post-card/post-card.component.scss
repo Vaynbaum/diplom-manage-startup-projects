@@ -1,0 +1,89 @@
+@import "../../../../styles.scss";
+mat-list {
+  .subtitle {
+    margin-bottom: 0;
+  }
+  padding: 0;
+  mat-list-item {
+    height: 48px !important;
+    cursor: pointer !important;
+
+    mat-icon {
+      margin-right: 10px;
+      width: 44px;
+      height: 44px;
+      padding: 10px;
+      margin-left: 0;
+      background: $darkBackgroundColor;
+      border-radius: 10px;
+    }
+  }
+}
+
+.example-card {
+  width: 100%;
+  border-radius: $borderRadius !important;
+  box-shadow: $boxShadow !important;
+
+  mat-card-header {
+    padding: $middleGap $paddingValue;
+    mat-card-title-group {
+      mat-card-title {
+        font-size: 16px;
+        color: $mainBlue;
+      }
+      mat-card-title:hover {
+        text-decoration: underline;
+      }
+
+      mat-card-subtitle {
+        font-size: 13px;
+      }
+    }
+    .example-header-image {
+      cursor: pointer;
+      background-size: cover;
+      margin-right: 10px;
+      margin-bottom: 0;
+      align-self: center;
+    }
+  }
+
+  mat-card-content {
+    padding: 0 $paddingValue;
+    display: flex;
+    flex-direction: column;
+    gap: $middleGap;
+    p {
+      text-align: justify;
+    }
+
+    p-galleria {
+      position: relative;
+      z-index: 100;
+      .back,
+      .front {
+        display: block;
+        border-radius: 10px;
+        width: 100%;
+      }
+
+      .front {
+        position: relative;
+        z-index: 1;
+        object-fit: contain;
+      }
+
+      .back {
+        position: absolute;
+        z-index: -1;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+  }
+
+  mat-card-actions {
+    padding: $middleGap $paddingValue;
+  }
+}

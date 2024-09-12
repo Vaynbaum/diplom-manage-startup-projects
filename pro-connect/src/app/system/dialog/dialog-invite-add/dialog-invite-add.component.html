@@ -1,0 +1,24 @@
+<h2 mat-dialog-title class="title">{{title}}</h2>
+<mat-dialog-content class="block">
+
+  <div class="items">
+    <div class="item" *ngFor="let user of data.freinds">
+      <div (click)="goToUser(user)" class="left-part port">
+        <div>
+          <img [src]="urlAvatar(user.avatar)">
+        </div>
+        <div class="info">
+          <div class="fullname">
+            {{user.firstname}} {{user.lastname}}
+          </div>
+        </div>
+      </div>
+
+      <div class="left-part">
+        <button (click)="sendInvite(user)" mat-icon-button>
+          <mat-icon>send</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>

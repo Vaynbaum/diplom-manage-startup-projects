@@ -1,0 +1,27 @@
+<h2 mat-dialog-title class="title">{{title}}</h2>
+<form [formGroup]="form" class="block">
+  <mat-form-field>
+    <mat-label>{{typeInput.label}}</mat-label>
+    <mat-select [formControl]="typeInput.formControl">
+      <mat-option (click)="selectContact(t)" *ngFor="let t of typeInput.items" [value]="t.title">{{t.title}}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="typeInput.formControl.invalid">
+      {{typeInput.messageError()}}
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>{{contactInput.label}}</mat-label>
+    <input matInput [type]="contactInput.type" [placeholder]="contactInput.placeholder"
+      [formControl]="contactInput.formControl">
+    <mat-icon matSuffix>{{contactInput.icon}}</mat-icon>
+    <mat-error *ngIf="contactInput.formControl.invalid">
+      {{contactInput.messageError()}}
+    </mat-error>
+  </mat-form-field>
+
+  <button [disabled]="form.invalid" mat-flat-button color="primary" (click)="save()">
+    <mat-icon>{{saveBtn.icon}}</mat-icon>{{saveBtn.title}}
+  </button>
+</form>

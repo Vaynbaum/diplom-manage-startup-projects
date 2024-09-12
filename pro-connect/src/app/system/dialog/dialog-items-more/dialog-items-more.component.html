@@ -1,0 +1,13 @@
+<h2 mat-dialog-title class="title">{{data.title}}
+  <span class="card-count"> {{data.items.length}}</span>
+</h2>
+
+<mat-dialog-content class="block">
+  <mat-list>
+    <mat-list-item *ngFor="let item of data.items" (click)="goTo(item.url)">
+      <img matListItemAvatar [src]="item.ava">
+      <div matListItemTitle>{{item.name}}</div>
+      <span *ngIf="item.description" matListItemLine>{{item.description}}</span>
+    </mat-list-item>
+  </mat-list>
+</mat-dialog-content>

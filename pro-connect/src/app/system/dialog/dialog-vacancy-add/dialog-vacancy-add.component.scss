@@ -1,0 +1,37 @@
+@import "../../../../styles.scss";
+@import "../../../../assets/styles/dialog-more.scss";
+
+textarea {
+  resize: none;
+}
+
+form {
+  padding: 0;
+}
+
+.btns {
+  margin-top: 10px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  gap: $paddingValue;
+}
+
+@media (min-width: 0px) {
+  .btns {
+    flex-direction: column;
+    button {
+      width: 100%;
+    }
+  }
+}
+@media (min-width: $minWidthTablet) {
+  .btns {
+    flex-direction: row;
+
+    button {
+      width: max-content !important;
+      padding: 0 10px;
+    }
+  }
+}

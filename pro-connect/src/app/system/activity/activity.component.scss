@@ -1,0 +1,12 @@
+@import "../../../styles.scss";
+@import "../../../assets/styles/common-page.scss";
+@import "../../../assets/styles/common-card.scss";
+@import "../../../assets/styles/profile.scss";
+
+.profile-name {
+  display: flex;
+  gap: 5px;
+  mat-icon {
+    cursor: pointer;
+  }
+}

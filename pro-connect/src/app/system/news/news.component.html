@@ -1,0 +1,63 @@
+<div class="container">
+  <div class="body-block">
+    <div class="left-column">
+      <app-post-card [isEdit]="false" [profile]="profile" [post]="post" *ngFor="let post of posts">
+      </app-post-card>
+    </div>
+
+    <div class="right-column">
+      <div class="card">
+        <mat-form-field class="search-field">
+          <mat-label>{{searchField.label}}</mat-label>
+          <input [placeholder]="searchField.placeholder" (keyup)="onKeyup()" matInput [(ngModel)]="searchValue">
+          <button *ngIf="searchValue" matSuffix mat-icon-button (click)="clearSearchValue()">
+            <mat-icon>{{searchField.closeBtn}}</mat-icon>
+          </button>
+          <mat-icon *ngIf="!searchValue" matSuffix>{{searchField.searchBtn}}</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field class="filter">
+          <mat-label>{{typeInput.label}}</mat-label>
+          <mat-select [formControl]="typeInput.formControl" multiple>
+            <mat-select-trigger>
+              {{displayValue()}}
+              <span *ngIf="(typeInput.formControl.value?.length || 0) > 1" class="example-additional-selection">
+                {{otherStatus()}}
+              </span>
+            </mat-select-trigger>
+            <mat-option (click)="selectType()" *ngFor="let topping of typeInput.values | async" [value]="topping">
+              {{topping.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="filter">
+          <mat-label>{{skillInput.label}}</mat-label>
+          <mat-chip-grid #chipGrid>
+            <mat-chip-row highlighted *ngFor="let tag of selectedTags">
+              {{tag.name}}
+              <button (click)="deleteTag(tag)" matChipRemove>
+                <mat-icon>cancel</mat-icon>
+              </button>
+            </mat-chip-row>
+          </mat-chip-grid>
+          <input (keyup)="onKeyupTag()" #fruitInput [placeholder]="skillInput.placeholder"
+            [formControl]="skillInput.formControl" [matChipInputFor]="chipGrid" [matAutocomplete]="auto" />
+          <mat-autocomplete #auto="matAutocomplete">
+            <ng-container *ngFor="let tag of skillInput.values | async">
+              <mat-option (click)="selectTag(tag)" [value]="tag.name">
+                <span>{{tag.name}}</span>
+              </mat-option>
+            </ng-container>
+          </mat-autocomplete>
+          <mat-icon *ngIf="skillInput.icon && !skillInput.is_enable_btn" matSuffix>{{skillInput.icon}}</mat-icon>
+        </mat-form-field>
+
+        <button (click)="resetFilters()" mat-flat-button color="primary">
+          <mat-icon>restart_alt</mat-icon> Сбросить
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>

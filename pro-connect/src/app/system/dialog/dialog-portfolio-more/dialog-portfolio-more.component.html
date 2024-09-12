@@ -1,0 +1,41 @@
+<h2 mat-dialog-title class="title">{{data.portfolio.type?.name}}</h2>
+<mat-dialog-content class="block">
+  <div class="field">
+    <mat-icon>title</mat-icon>
+    {{data.portfolio.type?.details?.name?.label}}: <span class="info">{{data.portfolio.name}}</span>
+  </div>
+
+  <div *ngIf="data.portfolio.value" class="field">
+    <mat-icon>{{data.portfolio.type?.details?.value?.icon}}</mat-icon>{{data.portfolio.type?.details?.value?.label}}:
+    <span class="info">{{data.portfolio.value}}</span>
+  </div>
+
+  <div *ngIf="data.portfolio.getted_at" class="field">
+    <mat-icon>event</mat-icon>Дата получения:
+    <span class="info">{{data.portfolio.getted_at | date: "dd MMMM yyyy г."}}</span>
+  </div>
+
+  <div *ngIf="data.portfolio.note" class="field">
+    <mat-icon>notes</mat-icon>
+    <span>{{data.portfolio.note}}</span>
+  </div>
+
+  <mat-divider *ngIf="data.portfolio.material?.img "></mat-divider>
+  <p-image *ngIf="data.portfolio.material?.img" [src]="compileUrl(data.portfolio.material?.img?.name)" alt="Image"
+    width="250" [preview]="true"></p-image>
+
+  <div class="field attach_file" *ngIf="data.portfolio.material?.file" (click)="redirectLink(data.portfolio.material?.file?.name)">
+    <mat-icon>attach_file</mat-icon>
+    <div>Прикрепленный файл</div>
+  </div>
+
+  <mat-divider *ngIf="data.portfolio.tags.length > 0"></mat-divider>
+  <div class="subblock" *ngIf="data.portfolio.tags.length > 0">
+    <h3>Навыки</h3>
+    <mat-chip-listbox>
+      <mat-chip-row matBadgeColor="accent" highlighted *ngFor="let tag_link of data.portfolio.tags">
+        {{tag_link.tag?.name}}
+      </mat-chip-row>
+    </mat-chip-listbox>
+  </div>
+</mat-dialog-content>

@@ -1,0 +1,427 @@
+import vakt
+from vakt.rules import Eq, Truthy, Any, NotEq
+
+from src.activity.consts import *
+from src.common.utils import IncrementorId
+from src.common.consts import *
+from src.portfolio.consts import RES_PORTFOLIO
+from src.post.consts import *
+from src.user.consts import *
+from src.group.consts import *
+from src.tag.consts import *
+
+Incrementor = IncrementorId()
+
+politicians = [
+    vakt.Policy(
+        Incrementor.get_value(),
+        actions=[Eq(METHOD_GET_ONE)],
+        resources=[{"name": Eq(RESOURCE_PROFILE), "role": Eq(ROLE_USER)}],
+        subjects=[Any()],
+        effect=vakt.ALLOW_ACCESS,
+        description="""Любой зарегистрированный может получить профиль юзера по его id""",
+    ),
+    vakt.Policy(
+        Incrementor.get_value(),
+        actions=[Eq(METHOD_GET_ONE)],
+        resources=[{"name": Eq(RESOURCE_PROFILE)}],
+        subjects=[{"is_owner": Truthy()}],
+        effect=vakt.ALLOW_ACCESS,
+        description="""Любой зарегистрированный может получить по id свой профиль""",
+    ),
+    vakt.Policy(
+        Incrementor.get_value(),
+        actions=[Eq(METHOD_GET_ONE)],
+        resources=[{"name": Eq(RESOURCE_PROFILE)}],
+        subjects=[{"role": Eq(ROLE_ADMIN)}],
+        effect=vakt.ALLOW_ACCESS,
+        description="Получить любой профиль по id может админ",
+    ),
+    vakt.Policy(
+        Incrementor.get_value(),
+        actions=[Eq(METHOD_GET_ALL)],
+        resources=[{"name": Eq(RES_GROUP)}],
+        subjects=[{"role": Eq(ROLE_USER)}],
+        effect=vakt.ALLOW_ACCESS,
+        description="""Любой пользователь может получить по свои группы""",
+    ),
+    vakt.Policy(
+        Incrementor.get_value(),
+        actions=[Eq(METHOD_GET_ALL)],
+        resources=[{"name": Eq(RES_ACTIVITY)}],
+        subjects=[{"role": Eq(ROLE_USER)}],
+        effect=vakt.ALLOW_ACCESS,
+        description="""Любой пользователь может получить по свои проекты""",
+    ),
+    vakt.Policy(
+        Incrementor.get_value(),
+        actions=[Eq(METHOD_UPDATE)],
+        resources=[{"name": Eq(RESOURCE_PROFILE)}],
+        subjects=[Any()],
+        effect=vakt.ALLOW_ACCESS,
+        description="Редактировать свой личный кабинет могут все",
+    ),
+    vakt.Policy(
+        Incrementor.get_value(),
+        actions=[Eq(METHOD_ADD)],
+        resources=[{"name": Eq(RES_GROUP)}],
+        subjects=[{"role": Eq(ROLE_USER)}],
+        effect=vakt.ALLOW_ACCESS,
+        description="Добавлять группы могут только пользователи",
+    ),
+    vakt.Policy(
+        Incrementor.get_value(),
+        actions=[Eq(METHOD_ADD), Eq(METHOD_DELETE)],
+        resources=[{"name": Eq(RESOURCE_SUBSCRIPTION)}],
+        subjects=[{"role": Eq(ROLE_USER)}],
+        effect=vakt.ALLOW_ACCESS,
+        description="Подписываться и Отписываться могут только пользователи",
+    ),
+    vakt.Policy(
+        Incrementor.get_value(),
+        actions=[Eq(METHOD_ADD), Eq(METHOD_DELETE)],
+        resources=[{"name": Eq(RESOURCE_USER_TAG)}],
+        subjects=[{"role": Eq(ROLE_USER)}],
+        effect=vakt.ALLOW_ACCESS,
+        description="Добавлять Удалять теги могут только пользователи",
+    ),
+    vakt.Policy(
+        Incrementor.get_value(),
+        actions=[Eq(METHOD_ADD)],
+        resources=[{"name": Eq(RESOURCE_AVA)}, {"name": Eq(RESOURCE_COVER)}],
+        subjects=[Any()],
+        effect=vakt.ALLOW_ACCESS,
+        description="Добавлять аватар и обложку могут все",
+    ),
+    vakt.Policy(
+        Incrementor.get_value(),
+        actions=[Eq(METHOD_ADD)],
+        resources=[{"name": Eq(RES_GROUP_SUB)}],
+        subjects=[{"role": Eq(ROLE_USER)}],
+        effect=vakt.ALLOW_ACCESS,
+        description="Подписаться на группу могут пользователи",
+    ),
+    vakt.Policy(
+        Incrementor.get_value(),
+        actions=[Eq(METHOD_DELETE)],
+        resources=[{"name": Eq(RES_GROUP_SUB)}],
+        subjects=[{"role": Eq(ROLE_USER), "role_group": NotEq(ROLE_ID_GR_CREATER)}],
+        effect=vakt.ALLOW_ACCESS,
+        description="Покинуть группу могут пользователи (кроме ее создателя)",
+    ),
+    vakt.Policy(
+        Incrementor.get_value(),
+        actions=[Eq(METHOD_ADD), Eq(METHOD_UPDATE), Eq(METHOD_DELETE)],
+        resources=[{"name": Eq(RES_GROUP_ROLE)}],
+        subjects=[
+            {"role": Eq(ROLE_USER), "role_group": Eq(ROLE_ID_GR_CREATER)},
+            {"role": Eq(ROLE_USER), "role_group": Eq(ROLE_ID_GROUP_ADMIN)},
+        ],
+        effect=vakt.ALLOW_ACCESS,
+        description="Добавить Изменить Удалить роли группы может ее владелец или администратор",
+    ),
+    vakt.Policy(
+        Incrementor.get_value(),
+        actions=[Eq(METHOD_ADD)],
+        resources=[
+            {
+                "name": Eq(RES_GROUP_ROLE_ASSIGN),
+                "role_group": NotEq(ROLE_ID_GR_CREATER),
+                "role_user": NotEq(ROLE_ID_GR_CREATER),
+            }
+        ],
+        subjects=[
+            {"role": Eq(ROLE_USER), "role_group": Eq(ROLE_ID_GR_CREATER)},
+            {"role": Eq(ROLE_USER), "role_group": Eq(ROLE_ID_GROUP_ADMIN)},
+        ],
+        effect=vakt.ALLOW_ACCESS,
+        description="""Назначать роли (кроме создателя) группы участникам (кроме создателя) 
+                        может ее владелец или администратор""",
+    ),
+    vakt.Policy(
+        Incrementor.get_value(),
+        actions=[Eq(METHOD_UPDATE)],
+        resources=[{"name": Eq(RES_GROUP)}],
+        subjects=[
+            {"role": Eq(ROLE_USER), "role_group": Eq(ROLE_ID_GR_CREATER)},
+            {"role": Eq(ROLE_USER), "role_group": Eq(ROLE_ID_GROUP_ADMIN)},
+        ],
+        effect=vakt.ALLOW_ACCESS,
+        description="""Изменять группу может ее владелец или администратор""",
+    ),
+    vakt.Policy(
+        Incrementor.get_value(),
+        actions=[Eq(METHOD_DELETE)],
+        resources=[{"name": Eq(RES_GROUP)}],
+        subjects=[{"role": Eq(ROLE_USER), "role_group": Eq(ROLE_ID_GR_CREATER)}],
+        effect=vakt.ALLOW_ACCESS,
+        description="""Удалять группу может ее владелец""",
+    ),
+    vakt.Policy(
+        Incrementor.get_value(),
+        actions=[Eq(METHOD_ADD)],
+        resources=[{"name": Eq(RES_GROUP_COVER)}, {"name": Eq(RES_GROUP_AVA)}],
+        subjects=[
+            {"role": Eq(ROLE_USER), "role_group": Eq(ROLE_ID_GR_CREATER)},
+            {"role": Eq(ROLE_USER), "role_group": Eq(ROLE_ID_GROUP_ADMIN)},
+        ],
+        effect=vakt.ALLOW_ACCESS,
+        description="Добавить аватар и обложку группы может ее владелец или администратор ",
+    ),
+    vakt.Policy(
+        Incrementor.get_value(),
+        actions=[Eq(METHOD_DELETE)],
+        resources=[
+            {"name": Eq(RES_GROUP_USER), "role_user": NotEq(ROLE_ID_GR_CREATER)}
+        ],
+        subjects=[
+            {"role": Eq(ROLE_USER), "role_group": Eq(ROLE_ID_GR_CREATER)},
+            {"role": Eq(ROLE_USER), "role_group": Eq(ROLE_ID_GROUP_ADMIN)},
+        ],
+        effect=vakt.ALLOW_ACCESS,
+        description="Изгнать пользователя (кроме владельца) группы может ее владелец или администратор",
+    ),
+    vakt.Policy(
+        Incrementor.get_value(),
+        actions=[Eq(METHOD_ADD)],
+        resources=[{"name": Eq(RES_ACTIVITY)}],
+        subjects=[{"role": Eq(ROLE_USER)}],
+        effect=vakt.ALLOW_ACCESS,
+        description="Добавлять деятельность могут пользователи",
+    ),
+    vakt.Policy(
+        Incrementor.get_value(),
+        actions=[Eq(METHOD_ADD), Eq(METHOD_DELETE)],
+        resources=[{"name": Eq(RES_ACT_TAG)}],
+        subjects=[{"role": Eq(ROLE_USER), "is_owner": Truthy()}],
+        effect=vakt.ALLOW_ACCESS,
+        description="""Пользователь владелец дейтельности может добавить или удалить навыки""",
+    ),
+    vakt.Policy(
+        Incrementor.get_value(),
+        actions=[Eq(METHOD_ADD), Eq(METHOD_UPDATE), Eq(METHOD_DELETE)],
+        resources=[{"name": Eq(RES_VACANCY)}],
+        subjects=[
+            {"role": Eq(ROLE_USER), "role_group": Eq(ROLE_ID_GR_CREATER)},
+            {"role": Eq(ROLE_USER), "role_group": Eq(ROLE_ID_GROUP_ADMIN)},
+        ],
+        effect=vakt.ALLOW_ACCESS,
+        description="Добавить, изменять или удалить вакансию может владелец или администратор группы",
+    ),
+    vakt.Policy(
+        Incrementor.get_value(),
+        actions=[Eq(METHOD_ADD), Eq(METHOD_DELETE)],
+        resources=[{"name": Eq(RES_VAC_TAG)}],
+        subjects=[
+            {"role": Eq(ROLE_USER), "role_group": Eq(ROLE_ID_GR_CREATER)},
+            {"role": Eq(ROLE_USER), "role_group": Eq(ROLE_ID_GROUP_ADMIN)},
+        ],
+        effect=vakt.ALLOW_ACCESS,
+        description="Добавить, удалить теги вакансии может владелец или администратор группы",
+    ),
+    vakt.Policy(
+        Incrementor.get_value(),
+        actions=[Eq(METHOD_ADD)],
+        resources=[{"name": Eq(RES_VAC_RES_APP)}, {"name": Eq(RES_VAC_RES_REJ)}],
+        subjects=[
+            {"role": Eq(ROLE_USER), "role_group": Eq(ROLE_ID_GR_CREATER)},
+            {"role": Eq(ROLE_USER), "role_group": Eq(ROLE_ID_GROUP_ADMIN)},
+        ],
+        effect=vakt.ALLOW_ACCESS,
+        description="Отклонять и одобрять отклики на вакансии может владелец или администратор группы",
+    ),
+    vakt.Policy(
+        Incrementor.get_value(),
+        actions=[Eq(METHOD_ADD), Eq(METHOD_DELETE)],
+        resources=[{"name": Eq(RES_VAC_RES)}],
+        subjects=[{"role": Eq(ROLE_USER)}],
+        effect=vakt.ALLOW_ACCESS,
+        description="Оставлять отклики могут только пользователи",
+    ),
+    vakt.Policy(
+        Incrementor.get_value(),
+        actions=[Eq(METHOD_ADD)],
+        resources=[{"name": Eq(RES_ACTIVITY_COVER)}, {"name": Eq(RES_ACTIVITY_AVA)}],
+        subjects=[{"role": Eq(ROLE_USER), "is_owner": Truthy()}],
+        effect=vakt.ALLOW_ACCESS,
+        description="Добавить аватар и обложку проекту может его владелец",
+    ),
+    vakt.Policy(
+        Incrementor.get_value(),
+        actions=[Eq(METHOD_UPDATE), Eq(METHOD_DELETE)],
+        resources=[{"name": Eq(RES_ACTIVITY)}],
+        subjects=[{"role": Eq(ROLE_USER), "is_owner": Truthy()}],
+        effect=vakt.ALLOW_ACCESS,
+        description="Изменить проект может его владелец",
+    ),
+    vakt.Policy(
+        Incrementor.get_value(),
+        actions=[Eq(METHOD_ADD), Eq(METHOD_DELETE)],
+        resources=[{"name": Eq(RES_INVATION)}],
+        subjects=[{"role": Eq(ROLE_USER), "is_owner": Truthy()}],
+        effect=vakt.ALLOW_ACCESS,
+        description="Отправить или удалить приглашение группе от проекта может его владелец",
+    ),
+    vakt.Policy(
+        Incrementor.get_value(),
+        actions=[Eq(METHOD_ADD), Eq(METHOD_DELETE)],
+        resources=[{"name": Eq(RES_REQUEST)}],
+        subjects=[
+            {"role": Eq(ROLE_USER), "role_group": Eq(ROLE_ID_GR_CREATER)},
+            {"role": Eq(ROLE_USER), "role_group": Eq(ROLE_ID_GROUP_ADMIN)},
+        ],
+        effect=vakt.ALLOW_ACCESS,
+        description="Отправить или удалить зявку на проект может владелец или администратор группы",
+    ),
+    vakt.Policy(
+        Incrementor.get_value(),
+        actions=[Eq(METHOD_UPDATE)],
+        resources=[
+            {"status": Eq(ACT_REQ_REQ), "name": Eq(RES_REQUEST_)},
+            {"status": Eq(ACT_REQ_REQ), "name": Eq(RES_REQUESTT)},
+        ],
+        subjects=[{"role": Eq(ROLE_USER), "is_owner": Truthy()}],
+        effect=vakt.ALLOW_ACCESS,
+        description="Одобрить или отклонить заявку может владелец проекта",
+    ),
+    vakt.Policy(
+        Incrementor.get_value(),
+        actions=[Eq(METHOD_UPDATE)],
+        resources=[
+            {"status": Eq(ACT_REQ_INV), "name": Eq(RES_INVATION_)},
+            {"status": Eq(ACT_REQ_INV), "name": Eq(RES_INVATIONT)},
+        ],
+        subjects=[
+            {"role": Eq(ROLE_USER), "role_group": Eq(ROLE_ID_GR_CREATER)},
+            {"role": Eq(ROLE_USER), "role_group": Eq(ROLE_ID_GROUP_ADMIN)},
+        ],
+        effect=vakt.ALLOW_ACCESS,
+        description="Одобрить или отклонить приглашение может владелец или администратор группы",
+    ),
+    vakt.Policy(
+        Incrementor.get_value(),
+        actions=[Eq(METHOD_UPDATE)],
+        resources=[{"name": Eq(RES_EXIT)}],
+        subjects=[
+            {"role": Eq(ROLE_USER), "role_group": Eq(ROLE_ID_GR_CREATER)},
+            {"role": Eq(ROLE_USER), "role_group": Eq(ROLE_ID_GROUP_ADMIN)},
+        ],
+        effect=vakt.ALLOW_ACCESS,
+        description="""Выйти из проекта может владелец или администратор группы""",
+    ),
+    vakt.Policy(
+        Incrementor.get_value(),
+        actions=[Eq(METHOD_UPDATE)],
+        resources=[{"name": Eq(RES_KICK)}],
+        subjects=[{"role": Eq(ROLE_USER), "is_owner": Truthy()}],
+        effect=vakt.ALLOW_ACCESS,
+        description="""Выгнать группу может владелец проекта""",
+    ),
+    vakt.Policy(
+        Incrementor.get_value(),
+        actions=[Eq(METHOD_ADD), Eq(METHOD_UPDATE), Eq(METHOD_DELETE)],
+        resources=[{"name": Eq(RES_TASK)}],
+        subjects=[
+            {"role": Eq(ROLE_USER), "role_group": Eq(ROLE_ID_GR_CREATER)},
+            {"role": Eq(ROLE_USER), "role_group": Eq(ROLE_ID_GROUP_ADMIN)},
+            {"role": Eq(ROLE_USER), "is_owner": Truthy()},
+        ],
+        effect=vakt.ALLOW_ACCESS,
+        description="""Добавить, удалить или изменить задачи может владелец или администратор группы, 
+                       которая работает над проектом или владелец проекта""",
+    ),
+    vakt.Policy(
+        Incrementor.get_value(),
+        actions=[Eq(METHOD_ADD), Eq(METHOD_DELETE)],
+        resources=[
+            {"name": Eq(RES_TASK_ASSIGN), "is_owner": Truthy()},
+            {"name": Eq(RES_TASK_ASSIGN), "role_group": NotEq(ROLE_ID_GROUP_OBSERER)},
+        ],
+        subjects=[
+            {"role": Eq(ROLE_USER), "role_group": Eq(ROLE_ID_GR_CREATER)},
+            {"role": Eq(ROLE_USER), "role_group": Eq(ROLE_ID_GROUP_ADMIN)},
+            {"role": Eq(ROLE_USER), "is_owner": Truthy()},
+        ],
+        effect=vakt.ALLOW_ACCESS,
+        description="""Назначить задачу может владелец или администратор группы, 
+                       которая работает над проектом или владелец проекта. 
+                       Задачу можно назначить владельцу проекта или членам группы, 
+                       которая работает над проектом""",
+    ),
+    vakt.Policy(
+        Incrementor.get_value(),
+        actions=[Eq(METHOD_UPDATE)],
+        resources=[{"name": Eq(RES_TASK_STATUS)}],
+        subjects=[
+            {"role": Eq(ROLE_USER), "role_group": Eq(ROLE_ID_GR_CREATER)},
+            {"role": Eq(ROLE_USER), "role_group": Eq(ROLE_ID_GROUP_ADMIN)},
+            {"role": Eq(ROLE_USER), "is_owner": Truthy()},
+            {"role": Eq(ROLE_USER), "is_assign": Truthy()},
+        ],
+        effect=vakt.ALLOW_ACCESS,
+        description="""Изменить статус задачи может владелец или администратор группы, 
+                       которая работает над проектом или владелец проекта, или тот кому она назначена""",
+    ),
+    vakt.Policy(
+        Incrementor.get_value(),
+        actions=[Eq(METHOD_GET_ALL)],
+        resources=[{"name": Eq(RES_TASK)}],
+        subjects=[
+            {"role": Eq(ROLE_USER), "role_group": Eq(ROLE_ID_GR_CREATER)},
+            {"role": Eq(ROLE_USER), "role_group": Eq(ROLE_ID_GROUP_ADMIN)},
+            {"role": Eq(ROLE_USER), "is_owner": Truthy()},
+            {"role": Eq(ROLE_USER), "is_assign": Truthy()},
+        ],
+        effect=vakt.ALLOW_ACCESS,
+        description="""Получить задачи может владелец или администратор группы, которая работает 
+                    над проектом или владелец проекта, или тот кому назначены задачи""",
+    ),
+    vakt.Policy(
+        Incrementor.get_value(),
+        actions=[Eq(METHOD_UPDATE)],
+        resources=[{"name": Eq(RESOURCE_EMAIL)}, {"name": Eq(RESOURCE_PASSWORD)}],
+        subjects=[Any()],
+        effect=vakt.ALLOW_ACCESS,
+        description="Изменять email и пароль могут все",
+    ),
+    vakt.Policy(
+        Incrementor.get_value(),
+        actions=[Eq(METHOD_ADD), Eq(METHOD_UPDATE), Eq(METHOD_DELETE)],
+        resources=[{"name": Eq(RES_POST)}],
+        subjects=[{"role": Eq(ROLE_USER), "is_owner": Truthy()}],
+        effect=vakt.ALLOW_ACCESS,
+        description="Добавлять, удалять и изменять посты может владелец профиля, группы, проекта",
+    ),
+    vakt.Policy(
+        Incrementor.get_value(),
+        actions=[Eq(METHOD_GET)],
+        resources=[{"name": Eq(RES_POST_LIKE)}],
+        subjects=[Any()],
+        effect=vakt.ALLOW_ACCESS,
+        description="""Любой пользователь может оценить пост""",
+    ),
+    vakt.Policy(
+        Incrementor.get_value(),
+        actions=[Eq(METHOD_ADD), Eq(METHOD_UPDATE), Eq(METHOD_DELETE)],
+        resources=[{"name": Eq(RES_PORTFOLIO)}],
+        subjects=[{"role": Eq(ROLE_USER), "is_owner": Truthy()}],
+        effect=vakt.ALLOW_ACCESS,
+        description="Добавлять, удалять и изменять достижения может владелец профиля, группы, проекта",
+    ),
+    vakt.Policy(
+        Incrementor.get_value(),
+        actions=[Eq(METHOD_DELETE)],
+        resources=[{"name": Eq(RESOURCE_PROFILE)}],
+        subjects=[Any()],
+        effect=vakt.ALLOW_ACCESS,
+        description="Удалять свой профиль могут все",
+    ),
+    vakt.Policy(
+        Incrementor.get_value(),
+        actions=[Eq(METHOD_ADD), Eq(METHOD_UPDATE), Eq(METHOD_DELETE)],
+        resources=[{"name": Eq(RES_GROUP_INS)}],
+        subjects=[{"role": Eq(ROLE_USER)}],
+        effect=vakt.ALLOW_ACCESS,
+        description="""Приглашать знакомых в группы могут все""",
+    ),
+]

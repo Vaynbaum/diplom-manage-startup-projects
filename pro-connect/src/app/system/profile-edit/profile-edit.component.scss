@@ -1,0 +1,43 @@
+@import "../../../assets/styles/edit-page.scss";
+.portfolio {
+  cursor: pointer;
+}
+.items {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  .response {
+    cursor: pointer;
+  }
+  .item {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: space-between;
+
+    .left-part {
+      display: flex;
+      gap: 5px;
+      align-items: center;
+      img {
+        width: 40px;
+        min-width: 24px;
+        border-radius: 50%;
+      }
+
+      .info {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        .fullname {
+          font-weight: 500;
+          font-size: 16px;
+        }
+        .other-info {
+          font-size: 13px;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,20 @@
+<h2 mat-dialog-title class="title">{{title}}</h2>
+<mat-list>
+  <div class="subtitle" *ngIf="data.materials.images.length>0" mat-subheader>Изображения</div>
+  <ng-container *ngIf="data.materials.images.length>0">
+
+    <mat-list-item (click)="redirectLink(image.name)" *ngFor="let image of data.materials.images">
+      <mat-icon matListItemIcon>image</mat-icon>
+      <div matListItemTitle>{{image.details.old_name}}</div>
+    </mat-list-item>
+    <mat-divider></mat-divider>
+  </ng-container>
+
+  <div class="subtitle" *ngIf="data.materials.files.length>0" mat-subheader>Файлы</div>
+  <ng-container *ngIf="data.materials.files.length>0">
+    <mat-list-item (click)="redirectLink(file.name)" *ngFor="let file of data.materials.files">
+      <mat-icon matListItemIcon>description</mat-icon>
+      <div matListItemTitle>{{file.details.old_name}}</div>
+    </mat-list-item>
+  </ng-container>
+</mat-list>

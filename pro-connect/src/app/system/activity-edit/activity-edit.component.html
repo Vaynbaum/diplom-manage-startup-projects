@@ -1,0 +1,242 @@
+<div class="container">
+  <mat-accordion multi>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <a [routerLink]="[profileSublock.backButton.link]" class="back-btn" mat-button>
+          <mat-icon [fontIcon]="profileSublock.backButton.icon"></mat-icon>
+        </a>
+        <mat-panel-title>
+
+          <h3 class="title">{{profileSublock.title}}</h3>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <form [formGroup]="form">
+        <mat-form-field *ngFor="let input of inputs">
+          <mat-label>{{input.label}}</mat-label>
+          <input *ngIf="input.type!='textarea'" matInput [type]="input.type" [placeholder]="input.placeholder"
+            [formControl]="input.formControl">
+
+          <textarea rows="5" *ngIf="input.type=='textarea'" matInput [type]="input.type"
+            [placeholder]="input.placeholder" [formControl]="input.formControl">
+          </textarea>
+          <button *ngIf="input.is_enable_btn" mat-icon-button matSuffix (click)="input.action_btn()">
+            <mat-icon>{{input.icon}}</mat-icon>
+          </button>
+          <mat-icon *ngIf="input.icon && !input.is_enable_btn" matSuffix>{{input.icon}}</mat-icon>
+          <mat-error *ngIf="input.formControl.invalid ">
+            {{input.messageError()}}
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>{{typeInput.label}}</mat-label>
+          <input [type]="typeInput.type" [placeholder]="typeInput.placeholder" matInput
+            [formControl]="typeInput.formControl" [matAutocomplete]="auto2">
+          <mat-autocomplete #auto2="matAutocomplete">
+            <ng-container *ngFor="let city of typeInput.values | async">
+              <mat-option [value]="city.name" (click)="selectCity(city)">
+                <span>{{city.name}}</span>
+                <small *ngIf="city.region"> ({{city.region.name}})</small>
+              </mat-option>
+            </ng-container>
+          </mat-autocomplete>
+          <mat-icon *ngIf="typeInput.icon && !typeInput.is_enable_btn" matSuffix>{{typeInput.icon}}</mat-icon>
+          <mat-error *ngIf="typeInput.formControl.invalid ">
+            {{typeInput.messageError()}}
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>{{directionInput.label}}</mat-label>
+          <mat-select [formControl]="directionInput.formControl">
+            <mat-option (click)="selectDirection(t)" *ngFor="let t of directionInput.items" [value]="t.name">
+              <mat-icon>{{t.icon}}</mat-icon>
+              {{t.name}}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="directionInput.formControl.invalid">
+            {{directionInput.messageError()}}
+          </mat-error>
+        </mat-form-field>
+      </form>
+
+      <mat-action-row>
+        <button (click)="deleteActivity()" mat-button color="primary">
+          <mat-icon>{{profileSublock.deleteButton.icon}}</mat-icon>{{profileSublock.deleteButton.title}}
+        </button>
+
+        <button (click)="saveActivity()" [disabled]="form.invalid" mat-flat-button color="primary">
+          <mat-icon>{{profileSublock.saveButton.icon}}</mat-icon>{{profileSublock.saveButton.title}}
+        </button>
+      </mat-action-row>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title class="header">
+          <h3 class="title">{{contactSublock.title}}</h3>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <form>
+        <div class="contact-row" *ngFor="let row of activityContacts">
+          <mat-form-field>
+            <mat-label>{{contactSublock.field}}</mat-label>
+            <input matInput [formControl]="row.formControl" readonly>
+          </mat-form-field>
+
+          <button mat-icon-button [matMenuTriggerFor]="menu">
+            <mat-icon>{{contactSublock.menu.icon}}</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button *ngFor="let btn of contactSublock.menu.btns" mat-menu-item (click)="btn.actions(row)">
+              <mat-icon>{{btn.icon}}</mat-icon>
+              <span>{{btn.title}}</span>
+            </button>
+          </mat-menu>
+        </div>
+      </form>
+
+      <mat-action-row>
+        <button mat-button (click)="addContact()" color="primary">
+          <mat-icon>{{contactSublock.addButton.icon}}</mat-icon>{{contactSublock.addButton.title}}
+        </button>
+        <button (click)="saveContacts()" mat-flat-button color="primary">
+          <mat-icon>{{contactSublock.saveButton.icon}}</mat-icon>{{contactSublock.saveButton.title}}
+        </button>
+      </mat-action-row>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title class="header">
+          <h3 class="title">{{roleSublock.title}}</h3>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <mat-chip-listbox>
+        <mat-chip-row matBadgeColor="primary" highlighted *ngFor="let tag of activityTags">
+          {{tag.tag?.name}}
+          <button (click)="deleteTag(tag)" matChipRemove>
+            <mat-icon>{{roleSublock.deleteButton.icon}}</mat-icon>
+          </button>
+        </mat-chip-row>
+      </mat-chip-listbox>
+
+      <mat-action-row>
+        <button (click)="addTag()" mat-flat-button color="primary">
+          <mat-icon>{{roleSublock.addButton.icon}}</mat-icon>{{roleSublock.addButton.title}}
+        </button>
+      </mat-action-row>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title class="header">
+          <h3 class="title">{{invateBlock.title}}</h3>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div class="items">
+        <div class="item" *ngFor="let req of activityRequests">
+          <div (click)="goToGroup(req.group)" class="left-part group">
+            <div>
+              <img [src]="urlAvatar(req.group.avatar)">
+            </div>
+            <div class="info">
+              <div class="fullname">
+                {{req.group.name}}
+              </div>
+              <div [ngStyle]="styleStatusReq(req)">{{req.status.name}}</div>
+            </div>
+          </div>
+
+          <div class="left-part">
+            <button mat-icon-button [matMenuTriggerFor]="menuVac">
+              <mat-icon>{{invateBlock.menu.icon}}</mat-icon>
+            </button>
+            <mat-menu #menuVac="matMenu">
+              <ng-container *ngFor="let btn of invateBlock.menu.btns">
+                <button *ngIf="btn.check(req)" (click)="btn.actions(req)" mat-menu-item>
+                  <mat-icon>{{btn.icon}}</mat-icon>
+                  <span>{{btn.title}}</span>
+                </button>
+              </ng-container>
+            </mat-menu>
+          </div>
+        </div>
+      </div>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel *ngIf="activity?.group">
+      <mat-expansion-panel-header>
+        <mat-panel-title class="header">
+          <h3 class="title">{{groupBlock.title}}</h3>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div class="item">
+        <div (click)="goToGroup(activity?.group)" class="left-part group">
+          <div>
+            <img [src]="urlAvatar(activity?.group?.avatar)">
+          </div>
+          <div class="info">
+            <div class="fullname">
+              {{activity?.group?.name}}
+            </div>
+            <div>{{activity?.group?.type?.name}}</div>
+          </div>
+        </div>
+      </div>
+      <mat-action-row>
+        <button (click)="kickGroup()" mat-flat-button color="primary">
+          <mat-icon>{{groupBlock.kickGroupBtn.icon}}</mat-icon>{{groupBlock.kickGroupBtn.title}}
+        </button>
+      </mat-action-row>
+    </mat-expansion-panel>
+
+
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title class="header">
+          <h3 class="title">{{portfolioSublock.title}}</h3>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div class="items">
+        <div class="item" *ngFor="let portfolio of activity?.portfolios">
+          <div (click)="openPortfolio(portfolio)" class="left-part portfolio">
+            <mat-icon class="img" *ngIf="portfolio.material?.img" matListItemIcon>image</mat-icon>
+            <mat-icon class="img" *ngIf="portfolio.material?.file" matListItemIcon>description</mat-icon>
+            <div class="info">
+              <div class="fullname">
+                {{portfolio.name}}
+              </div>
+              <div>{{portfolio.type?.name}} <span *ngIf="portfolio.value">• {{portfolio.value}}</span></div>
+            </div>
+          </div>
+
+          <div class="left-part">
+            <button mat-icon-button [matMenuTriggerFor]="menupr">
+              <mat-icon>{{portfolioSublock.menu.icon}}</mat-icon>
+            </button>
+            <mat-menu #menupr="matMenu">
+              <ng-container *ngFor="let btn of portfolioSublock.menu.btns">
+                <button (click)="btn.actions(portfolio)" mat-menu-item>
+                  <mat-icon>{{btn.icon}}</mat-icon>
+                  <span>{{btn.title}}</span>
+                </button>
+              </ng-container>
+            </mat-menu>
+          </div>
+        </div>
+      </div>
+
+      <mat-action-row>
+        <button (click)="addPortfolio()" mat-flat-button color="primary">
+          <mat-icon>{{portfolioSublock.addButton.icon}}</mat-icon>{{portfolioSublock.addButton.title}}
+        </button>
+      </mat-action-row>
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>
